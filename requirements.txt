@@ -1,0 +1,12 @@
+numpy
+scipy
+matplotlib
+time
+warnings
+datetime
+functools
+numba
+joblib
+sympy
+symengine
+pywigxjpf

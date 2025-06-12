@@ -1,0 +1,5 @@
+include BaF_solver/interaction.pyx
+
+# If you have other .pyx or .pxd files in the BaF_solver directory,
+# or want to include all of them, use this (more robust):
+#recursive-include BaF_solver *.pyx *.pxd
