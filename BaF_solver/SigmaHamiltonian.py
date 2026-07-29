@@ -1,19 +1,20 @@
 import numpy as np
 import scipy
+from .hamiltonian import H0_sigma, HZeeman_sigma, HStark_sigma
+from .states import SigmaLevel, Superposition
 import time
 
-from .hamiltonian import H0_sigma, HZeeman_sigma
-from .states import SigmaLevel, Superposition
-
-
 class SigmaHamiltonian():
-    def __init__(self,states,F_plus,B_field):
+    def __init__(self,states,F_plus,B_field,E_stat_field):
         self.bare = []
-        self.Zeeman = self.Zeeman(states,F_plus,B_field) 
+        self.Zeeman = self.Zeeman(states,F_plus,B_field)
+        self.Stark =  self.Stark(states,F_plus,E_stat_field)
         self.states = states
         self.diagonalized_states = []
         self.diagonalized_Hamiltonian = None
+        self.diagonalizing_Matrix = None
         self.B_field = B_field
+        self.E_stat_field = E_stat_field
         self.diagonalized_states_as_vectors = []
         #self.species = species
     
@@ -67,6 +68,58 @@ class SigmaHamiltonian():
                 self.Y = Uy@self.Z@Uyd
             else:
                 self.Y = np.zeros_like(HZ)
+
+    class Stark():
+        def __init__(self,states,F_plus,E_stat_field):
+            self.Nlevels = len(states)
+            self.states = states
+            self.E_stat_field = E_stat_field
+            self.F_plus,self.F_minus = self.create_ladder_operators(F_plus)
+            self.F_x = 1/2*(self.F_plus+self.F_minus)
+            self.F_y = -1j/2*(self.F_plus-self.F_minus)
+            self.X,self.Y,self.Z =[],[],[]
+
+        def create_ladder_operators(self,F_plus):
+            A_plus = np.zeros((self.Nlevels,self.Nlevels))
+            current_index = 0
+            for i,sub_F_plus in enumerate(F_plus):
+                m = np.shape(sub_F_plus)[0] #sub_F_plus is a numpy array of dim 2F+1 x 2F+1
+                A_plus[current_index:current_index+m,current_index:current_index+m] = sub_F_plus
+                current_index += m
+            A_minus = np.transpose(A_plus)
+            return A_plus,A_minus
+
+        def generate_Stark(self):
+            #check if the states have been generated with the mF levels
+            if self.states[0].mF == None:
+                raise ValueError("Error. Cannot generate Stark Hamiltonian. States generated without magnetic sublevels")
+            HZ_stark = np.zeros((self.Nlevels,self.Nlevels))
+            for row in range(self.Nlevels):
+                for col in range(row+1):
+                    temp_val = HStark_sigma(self.states[row],self.states[col])
+                    #if np.abs(temp_val)>0:
+                    #    print(temp_val)
+                    HZ_stark[row,col] = temp_val
+                    if row != col:
+                        HZ_stark[col,row] = np.conjugate(temp_val) #########################conjugated
+            self.Z = HZ_stark
+            
+            if self.E_stat_field[0] != -10:
+                #generate the X Hamiltonian
+                # X is obtained by rotating the Z Hamiltonian by pi/2 about the y axis
+                Ux = scipy.linalg.expm(-1j*self.F_y*np.pi/2)
+                Uxd = scipy.linalg.expm(1j*self.F_y*np.pi/2)
+                self.X = Ux@self.Z@Uxd
+            else:
+                self.X = np.zeros_like(HZ_stark)
+            
+            if self.E_stat_field[1] != -10:
+                #Y is obtained by rotating the Z Hamiltonian by -pi/2 about the x axis
+                Uy = scipy.linalg.expm(1j*self.F_x*np.pi/2)
+                Uyd = scipy.linalg.expm(-1j*self.F_x*np.pi/2)
+                self.Y = Uy@self.Z@Uyd
+            else:
+                self.Y = np.zeros_like(HZ_stark)
             
             
     
@@ -85,20 +138,47 @@ class SigmaHamiltonian():
     
         
     def diagonalize(self):
-        if len(self.bare) == 0 and len(self.Zeeman.Z) == 0:
+        if len(self.bare) == 0 and len(self.Zeeman.Z) == 0 and len(self.Stark.Z) == 0:
             raise ValueError("Error. Hamiltonian not generated.")
-        if len(self.Zeeman.Z) == 0 and len(self.bare) != 0:
+        if len(self.Zeeman.Z) == 0 and len(self.Stark.Z) == 0 and len(self.bare) != 0:
             H_temp = self.bare
-        if len(self.Zeeman.Z) != 0 and len(self.bare) != 0:
+        if len(self.Zeeman.Z) != 0 and len(self.Stark.Z) == 0 and len(self.bare) != 0:
             H_temp = self.bare + self.B_field[0]*self.Zeeman.X+ \
                                     self.B_field[1]*self.Zeeman.Y+ \
                                     self.B_field[2]*self.Zeeman.Z
+        if len(self.Zeeman.Z) == 0 and len(self.Stark.Z) != 0 and len(self.bare) != 0:
+            H_temp = self.bare + self.E_stat_field[0]*self.Stark.X+ \
+                                    self.E_stat_field[1]*self.Stark.Y+ \
+                                    self.E_stat_field[2]*self.Stark.Z
+        if len(self.Zeeman.Z) != 0 and len(self.Stark.Z) != 0 and len(self.bare) != 0:
+            H_temp = self.bare + self.B_field[0]*self.Zeeman.X + \
+                                    self.B_field[1]*self.Zeeman.Y + \
+                                    self.B_field[2]*self.Zeeman.Z + \
+                                    self.E_stat_field[0]*self.Stark.X + \
+                                    self.E_stat_field[1]*self.Stark.Y + \
+                                    self.E_stat_field[2]*self.Stark.Z    
+                                
+        
         #print(H_temp)
         w,v = np.linalg.eigh(H_temp) #columns of v are the eigenvectors
         #print(w)
         sort_idx = np.argsort(w)
         #print(v)
         w,v = w[sort_idx],v[:,sort_idx]
+
+        #columns of v are the vectors
+        for i in range(v.shape[0]):
+            v_temp = v[:,i]
+
+            #let's follow the convention that the largest entry is positive
+            #find the largest entry
+            max_idx = np.argmax(np.abs(v_temp))
+            #find the sign of the largest enty
+            sign_max = np.sign(v_temp[max_idx])
+            v_temp = v_temp/sign_max
+            v[:,i] = v_temp
+
+        #arrange the columns of v such that 
 
         #Verify that v is a unitary matrix
         """
@@ -109,6 +189,7 @@ class SigmaHamiltonian():
         print(f"Unitarity check : {np.allclose(_temp, identity_matrix)}")
         """
         self.diagonalized_Hamiltonian = np.conjugate(v.transpose())@H_temp@v
+        self.diagonalizing_Matrix = v
         w=np.round(w,6)
         
         self.diagonalized_states_as_vectors = v#[v[:,i] for i in range(v.shape[0])]
@@ -116,7 +197,17 @@ class SigmaHamiltonian():
         #print(w)
         #to represent the diagonalized states
         for i in range(len(w)):
-            v_temp = np.round(v[:,i],5)###############################################################
+            #v_temp = v[:,i]
+            v_temp = np.round(v[:,i],6)###############################################################
+
+            """
+            #let's follow the convention that the largest entry is positive
+            #find the largest entry
+            max_idx = np.argmax(np.abs(v_temp))
+            #find the sign of the largest enty
+            sign_max = np.sign(v_temp[max_idx])
+            v_temp = v_temp/sign_max
+            """
             #v_temp = v[:,i]
             non_zero_idx = np.nonzero(v_temp)[0]
             amp = []

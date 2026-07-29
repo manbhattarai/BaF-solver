@@ -1,22 +1,20 @@
-#Standart imports
 import numpy as np
 import scipy
 import warnings
+from .spin_params import *
+
+#from interaction import H_int
+from .hamiltonian import H_int
+from .states import SigmaLevel, PiLevelParity#, Superposition
+from .SigmaHamiltonian import *
+from .PiHamiltonian import *
+#from numba import jit
 from joblib import Parallel, delayed
 import time
 
-
-#Local import
-from .spin_params import *
-from .hamiltonian import H_int
-from .states import SigmaLevel, PiLevelParity
-from .SigmaHamiltonian import *
-from .PiHamiltonian import *
-
-
 class System():
     """ What does the system class contain!"""
-    def __init__(self,N_sigma,J_pi,B_field = [0,0,0],ignore_mF = False):
+    def __init__(self,N_sigma,J_pi,B_field = [0,0,0],E_stat_field = [0,0,0],ignore_mF = False):
         """
         J_pi is a string or a list of string where each element is of the form 'J-' or 'J+' where 
         J is the total angular momentum and the sign following is the parity
@@ -32,6 +30,10 @@ class System():
             self.J_list = [J_pi]
         
         self.B_field = B_field
+        
+        if E_stat_field:
+            self.E_stat_field = E_stat_field
+        
         self.sigma_states = []
         self.pi_states = []
         self.F_plus_sigma_all = []
@@ -40,8 +42,8 @@ class System():
         self.generate_pi_states(ignore_mF = ignore_mF)
         
 
-        self.sigma_Hamiltonian = SigmaHamiltonian(self.sigma_states,self.F_plus_sigma_all,self.B_field)
-        self.pi_Hamiltonian = PiHamiltonian(self.pi_states,self.F_plus_pi_all,self.B_field)
+        self.sigma_Hamiltonian = SigmaHamiltonian(self.sigma_states,self.F_plus_sigma_all,self.B_field,self.E_stat_field)
+        self.pi_Hamiltonian = PiHamiltonian(self.pi_states,self.F_plus_pi_all,self.B_field,self.E_stat_field)
         
         self.interaction_Hamiltonian = None
         self.branching_ratios = None
@@ -106,29 +108,46 @@ class System():
         num_1 = len(state1)
         num_2 = len(state2)
         Hint = np.zeros((num_1+num_2,num_1+num_2),dtype=np.complex128)
-        
         Htemp = Parallel(n_jobs = -1)(delayed(H_int)(state1[m],state2[n],pol) for m in range(num_1) for n in range(num_2))
         for m in range(num_1):
             for n in range(num_2):
                 Hint[m,num_1+n] = Htemp[0]
                 Hint[num_1+n,m] = np.conj(Hint[m,num_1+n])
                 Htemp.pop(0)
+        
         #Hint = Hint + np.conj(Hint.T)
+        self.interaction_Hamiltonian = Hint
+
+    def generate_interaction_Hamiltonian_optimized(self,state1:list,state2:list,pol = 0):
+        num_1 = len(state1)
+        num_2 = len(state2)
+        size = num_1 + num_2
+        Hint = np.zeros((size, size), dtype=np.complex128)
+        Htemp = Parallel(n_jobs=-1)(
+            delayed(H_int)(state1[m], state2[n],pol)
+            for m in range(num_1) for n in range(num_2)
+        )
+        Htemp = np.array(Htemp).reshape((num_1, num_2))
+        for m in range(num_1):
+            for n in range(num_2):
+                val = Htemp[m, n]
+                Hint[m, num_1 + n] = val
+                Hint[num_1 + n, m] = val.conjugate()
         self.interaction_Hamiltonian = Hint
         
     def generate_branching_ratios(self,ground_state:list,excited_state:list):
         start = time.perf_counter()
         Trans_z = np.abs(self.generate_interaction_matrix(ground_state,excited_state,pol=0))**2
         stop_pi = time.perf_counter()
-        print(f"Pi branching took : {stop_pi-start} sec")
+        #print(f"Pi branching took : {stop_pi-start} sec")
 
         Trans_sigma_plus = np.abs(self.generate_interaction_matrix(ground_state,excited_state,pol=1))**2 
         stop_sigmaplus = time.perf_counter()
-        print(f"Sigma+ branching took : {stop_sigmaplus-stop_pi} sec")
+        #print(f"Sigma+ branching took : {stop_sigmaplus-stop_pi} sec")
 
         Trans_sigma_minus = np.abs(self.generate_interaction_matrix(ground_state,excited_state,pol=-1))**2
         stop_sigmaminus = time.perf_counter()
-        print(f"Sigma- branching took : {stop_sigmaminus-stop_sigmaplus} sec")
+        #print(f"Sigma- branching took : {stop_sigmaminus-stop_sigmaplus} sec")
 
         Trans_tot = Trans_z+Trans_sigma_plus+Trans_sigma_minus
         sum_over_ground = np.sum(Trans_tot,axis=0) #sum over the rows

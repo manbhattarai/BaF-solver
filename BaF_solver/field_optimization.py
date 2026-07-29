@@ -3,10 +3,10 @@ import numpy as np
 import copy
 
 #Importing the solver modules
-import .system
-from .obe import obe 
-from .states import SigmaLevel,PiLevelParity
-from .obe import Excitation
+import system
+from obe import obe 
+from states import SigmaLevel,PiLevelParity
+from obe import Excitation
 
 
 def field_optimizer(Bz,rabi,detuning,level_to_optimize):

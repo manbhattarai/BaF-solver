@@ -1,30 +1,30 @@
 from functools import lru_cache
+
+import sympy as sp
+from sympy import I
+t_sp=sp.symbols('t',real = sp.true)
+
+import symengine as se
+t_se = se.Symbol("t", real=True)
+
 import numpy as np
-from numba import njit, complex128, int64
+from numba import njit, complex128, int64,prange
+
+import scipy
 from scipy.integrate import solve_ivp
 from scipy.integrate import odeint
-import warnings
-import time
 
-#Diffeqpy import
+from .molecular_parameters import Gamma;
+Gamma *= 2*np.pi
+
+import warnings
 try:
     from diffeqpy import de,ode
 except Exception as e:
     # Fallback to default and warn
     warnings.warn(f"Could not detect diffeqpy. Only Python package for OBE solver available.")
 
-#Sympy import
-import sympy as sp
-from sympy import I
-t_sp=sp.symbols('t',real = sp.true)
-
-#Symengine import
-import symengine as se
-t_se = se.Symbol("t", real=True)
-
-#Local import
-from .molecular_parameters import Gamma;
-Gamma *= 2*np.pi
+import time
 
 
 def pulse_se(t_symbol,center,width):
@@ -35,9 +35,30 @@ def pulse_sp(t_symbol,center,width):
     k = 200
     return 0.5 * (sp.tanh(k * (t_symbol-center + width / 2)) - sp.tanh(k * (t_symbol-center - width / 2)))
 
+
+
 def pulse_np(t_num,center,width):
     k = 200
     return 0.5 * (np.tanh(k * (t_num-center + width / 2)) - np.tanh(k * (t_num-center - width / 2)))
+
+def approx_form(t_num,sigma):
+    return (np.exp(-(t_num-2*sigma)/2/sigma**2) + np.exp(-(t_num-6*sigma)/2/sigma**2) + np.exp(-(t_num-8*sigma)/2/sigma**2))*np.sqrt(8/np.pi)
+
+def unipolar(t_symbol,center,sigma):
+    return 1/se.cosh((t_symbol-center)/sigma)
+
+def static_gaussian(t_symbol,center,sigma):
+    return se.exp(-(t_symbol-center)**2/sigma**2)
+
+def bipolar(t_symbol,center,sigma,x):
+    return 1/2.0*x/sigma*1/se.cosh((t_symbol-center)/sigma)*se.tanh((t_symbol-center)/sigma)
+
+def single_sinusoidal(t_symbol,center,width):
+    freq = 1/width
+    return se.sin(2*se.pi*freq*t_symbol)*pulse_sp(t_symbol,center,width)
+
+
+
 
 
 class Excitation():
@@ -84,7 +105,29 @@ class Excitation():
     def __str__(self):
         return f"rabi = {self.rabi}, pol = {self.pol}, Ground = {self.ground_state}, Excited = {self.excited_state}, detuning  = {self.detuning}, position = {self.position}, diameter = {self.diameter}, shape = "+ self.shape
      
-
+class Static_Excitation():
+    """
+    E_amplitude : specified as magnitude of electric field in units of V/cm
+    pol : direction of the electric field
+    position : position of the center. Depends on the shape of the field
+    diameter : spatial extent of the electric field. Depends on the shape of the field
+    shape : Shape as defined by strings as 
+            "Unipolar",
+            "Bipolar",
+            "Sinusoidal"    
+    """
+    def __init__(self, E_amplitude:float, pol:int, position = None, diameter = None, shape = None):
+        self.E_amplitude = E_amplitude #expressed in V/cm
+        self.pol = pol
+        self.position = position
+        self.diameter = diameter
+        self.shape    = shape
+    
+    def __repr__(self):
+        return f"E_amplitude = {self.E_amplitude}, pol = {self.pol}, position = {self.position}, diameter = {self.diameter}, shape = "+ self.shape
+    def __str__(self):
+        return f"E_amplitude = {self.E_amplitude} V/cm, pol = {self.pol}, position = {self.position}, diameter = {self.diameter}, shape = "+ self.shape
+     
 
 class obe:
     """obe class takes in light atom interaction fields, creates interaction Hamiltonian and solves optical bloch equations
@@ -103,17 +146,16 @@ class obe:
         excited states.
         The element br[m,n] represents the probability of the excited state n decaying to ground state m by spontaneous emission. The sum
         of elements along the columns is 1.
-    Hint_func: None or lambda function
-        If None, the solver is called to create an interaction Hamiltonian, considering all the fields passed to the obe class.
-        If passed as a lambda function of time, is used as interacting Hamiltonian by the solver.
 
     """
     def __init__(self,E_field,
-                    states, #these are the states corresponding to initial B value
-                    H0, # interpolation function
-                    Hint, #interpolation function
-                    br, #interpolation function
+                    states,  #these are the states corresponding to initial B value
+                    H0,      # interpolation function
+                    Hint,    #interpolation function
+                    Hstatic_int, #interpolation function; encapsulates static electric field interaction
+                    br,      #interpolation function
                     B_field, # a tuple (B0,grad)
+                    E_stat_field,
                     test_factor,
                     mode = 'symengine',
                     **kwargs): 
@@ -122,6 +164,11 @@ class obe:
             self.E_field = [E_field]
         else:
             self.E_field = E_field
+
+        if isinstance(E_stat_field,Static_Excitation):
+            self.E_stat_field = [E_stat_field]
+        else:
+            self.E_stat_field = E_stat_field
 
         self.B0 = B_field[0]  
         self.grad = B_field[1]  
@@ -144,15 +191,29 @@ class obe:
 
 
         self.H0 = H0 # interpolating function. Array of size _n_total x _n_total
+        self.Hstatic_int = Hstatic_int
 
         self._H0_base = 2*np.pi*self.get_interp_array(H0,(self._n_total,self._n_total),self.B0,real_imag = False)
         self._H0_base_diag = np.diag(self._H0_base)
 
         self.Hinit_scipy = 0
         self.Hinit_symengine = 0
+        
+
+
+        if E_stat_field:
+            self.H_static_multiplier = self.electric_static_multiplier()
+        else:
+            self.H_static_multiplier = [0,0]
+
+        self.scipy_symengine_multiplication = 0
+        self.commutator_time_mult = 0
+        self.commutator_time_conj_add = 0
         self.commutator_time_numba = 0
+        self.commutator_time_numpy = 0
         self.decay_time = 0
         self.repop_time = 0
+        self.reshaping = 0
         
         A = np.zeros((self._n_total,self._n_total),dtype = np.complex128)
         np.fill_diagonal(A[self._n_ground:self._n_total, self._n_ground:self._n_total], 1.0)
@@ -161,8 +222,6 @@ class obe:
         
         self.br = br # interpolating function
         
-        #the mF states are good quantum numbers for every magnetic field.
-        #we rearrange the states so that the ordering of the mF states stay the same
         self._ground_mF_lists = [[s.mF for s in gs.states] for gs in self.ground_states]
         self._excited_mF_lists = [[s.mF for s in es.states] for es in self.excited_states]
         
@@ -173,7 +232,9 @@ class obe:
         elif mode == 'sympy':
             print('Sympy not available with gradient calculating solve. Switching to symengine mode.')
             self.Hint = self.interaction_picture_symengine()
+            #self.Hint = self.interaction_picture_sympy()
         else:
+
             print("Mode not recognized")
             raise ValueError(f"Unsupported mode: {mode}")
             return 0
@@ -190,9 +251,9 @@ class obe:
             return A_interp(t).reshape(shape)
           
         
-    def solve(self,npoints,r_init:np.ndarray, max_step_size = 1.0/Gamma, package = 'Python',method = 'RK45'):
+    def solve(self,npoints,r_init:np.ndarray, max_step_size = 1.0/Gamma, package = 'Python',method = 'RK45',pass_number = 1):
 
-        @njit(complex128[:,:](int64,complex128[:],complex128[:,:]),cache = True)
+        @njit(complex128[:, :](int64,complex128[:],complex128[:, :]),cache = True)
         def decay_product(n,G_diag, R):
             S = np.empty((n, n), dtype=np.complex128)
             for i in range(n):
@@ -203,7 +264,7 @@ class obe:
                         S[j, i] = np.conj(val)
             return S
 
-        @njit(complex128[:,:](int64,complex128[:,:]),cache = True)
+        @njit(complex128[:, :](int64,complex128[:,:]),cache = True)
         def numba_commutator(N,HR):
             comm = np.empty((N, N), dtype=np.complex128)
             for i in range(N):
@@ -220,10 +281,12 @@ class obe:
             R = u.reshape((self._n_total, self._n_total))
             
             B = self.B0+self.grad*T
+            #print(T,",",(B - self.B0)*2*1.399)
             
             if self.mode == 'symengine':
                 #(H_temp_real,H_temp_imag) = self.Hint
                 start = time.perf_counter()
+                #2*np.pi*self.get_interp_array(H0,(self._n_total,self._n_total),self.B0,real_imag = False)
                 H = 2*np.pi*self.get_interp_array(self.H0,(self._n_total,self._n_total),B) - \
                     self._H0_base
                 #if not (self.Hinit_time%1000):
@@ -232,6 +295,9 @@ class obe:
                 stop = time.perf_counter()
 
                 self.Hinit_scipy += stop-start
+
+                
+
                 for count,Hint_single in enumerate(self.Hint_list):
                     
                     start = time.perf_counter()
@@ -240,19 +306,43 @@ class obe:
                     H_interpol = Hint_single_real + 1.0j* Hint_single_imag
                     stop = time.perf_counter()
                     self.Hinit_scipy += stop-start
-                    Hint_lambda_real,Hint_lambda_imag = self.Hint[count]
-                    H_lambda = Hint_lambda_real(T) + 1.0j*Hint_lambda_imag(T)
+                    Hint_lambda_real, Hint_lambda_imag = self.Hint[count]
+                    H_lambda = Hint_lambda_real(T) + 1.0j * Hint_lambda_imag(T)
+                    # change here to incorporate multiple passes
+                    if self.overall_envelope:
+                        single_sigma = self.overall_envelope.params['single_sigma']
+                        overall_sigma = self.overall_envelope.params['sigma']
+                        #H_lambda *= approx_form(T + sigma_single * pass_number,self.overall_sigma)
+
+                        H_lambda *= self.overall_envelope.func(T + 4*single_sigma * pass_number, overall_sigma,pass_number)
+                        #print(T + 4*single_sigma * pass_number,end = ',')
                     self.Hinit_symengine += stop-start
+
 
                     #check if any is zero
                     
-                    
+                    start = time.perf_counter()
                     H += H_interpol * H_lambda
+                    stop = time.perf_counter()
+                    self.scipy_symengine_multiplication += stop - start
             
             else:
                 raise ValueError(f"Unsupported mode: {self.mode}")
                 print("Mode not recognized.")
                 return 0
+
+
+            #Extract the static electric field interaction
+            #H_static_electric is a real Hamiltonian 
+            H_static_electric_interpol = 2*np.pi*self.get_interp_array(self.Hstatic_int,(self._n_total,self._n_total),B)
+
+            #print(f"[{np.round(T,3)},  {np.round(H_static_electric[3,4],5)}]")
+            H_static_electric_lambda = self.H_static_multiplier[0](T) +1.0j * self.H_static_multiplier[1](T)
+            H_static_electric = H_static_electric_interpol*H_static_electric_lambda
+            #print(H_static_electric[3:4+1,3:4+1])
+            H += H_static_electric    
+            #print(H[3:4+1,3:4+1])
+            #print("-----")
 
             #commuter term
             start = time.perf_counter()
@@ -272,8 +362,8 @@ class obe:
             start = time.perf_counter()
             R_exec = R.diagonal()[self._n_ground : self._n_total]
 
-            br = self.get_interp_array(self.br,(self._n_ground,self._n_exec),B)            
-            Rm_diag = br@R_exec
+            BR = self.get_interp_array(self.br,(self._n_ground,self._n_exec),B)            
+            Rm_diag = BR@R_exec
 
             indices = np.arange(self._n_ground)
             diag_values = Gamma * Rm_diag[:self._n_ground]
@@ -287,6 +377,7 @@ class obe:
         #extract the max and the min of the interaction time
         tmax = -1e3
         tmin =  1e3
+        #Also need to consider the static electric fields as they are applied
         for E_field in self.E_field:
             if E_field.shape == 'Gaussian':
                 t_start = E_field.position - 1.5*E_field.diameter
@@ -298,22 +389,23 @@ class obe:
                 tmin = t_start
             if t_end > tmax:
                 tmax = t_end
-        #print(tmin,tmax)
+        #print(tmin,tmax)  
         tinterval = np.linspace(tmin,tmax,npoints)
         
         if package == 'Python':
-            print("Solving started.")
+            #print("Solving started.")
             start = time.perf_counter()
             result = solve_ivp(Rdot_python,[tinterval[0],tinterval[-1]],r_init.flatten(),
                             t_eval = tinterval,
                             method = method,
                             max_step = max_step_size,
                             dense_output = False,
-                            atol = 1e-6,rtol = 1e-3
+                            atol = 1e-6,rtol = 1e-4
                             )
-            print("nfev:", result.nfev)
-            print(f"ODE solver took : {time.perf_counter() - start} s")
+            #print("nfev:", result.nfev)
+            #print(f"ODE solver took : {time.perf_counter() - start} s")
             result = np.array(result.y).T
+            #print("")
         
         elif package == 'Julia':
 
@@ -325,11 +417,14 @@ class obe:
             print(f"Julia solving took {time.perf_counter() - start} s.")
         
         #print(f"Magnetic field final : {B} G.")
-        print(f'Time spent on lambdified Hinit symengine= {self.Hinit_symengine :.3f}s')
-        print(f'Time spent on interpolated Hinit scipy= {self.Hinit_scipy :.3f}s')
-        print(f'Time spent on commutator numba = {self.commutator_time_numba :.3f}s')
-        print(f'Time spent on decay = {self.decay_time :.3f}s')
-        print(f'Time spent on repopulation = {self.repop_time :.3f}s')
+        if 1 == 0:
+            print(f'Time spent on lambdified Hinit symengine= {self.Hinit_symengine :.3f}s')
+            print(f'Time spent on interpolated Hinit scipy= {self.Hinit_scipy :.3f}s')
+            print(f'Time spent on interpolated Hinit scipy symengine multiplication = {self.scipy_symengine_multiplication :.3f}s')
+            
+            print(f'Time spent on commutator numba = {self.commutator_time_numba :.3f}s')
+            print(f'Time spent on decay = {self.decay_time :.3f}s')
+            print(f'Time spent on repopulation = {self.repop_time :.3f}s')
         return result
     
 
@@ -386,6 +481,9 @@ class obe:
                     mF_init_list = self._ground_mF_lists[i]
                     for j in range(self._n_ground,self._n_total): #index for excited states. Looking at the upper triangular region only
                         
+                        if (i == 3) and (j == 25):
+                            #print("Printing")
+                            print(f"Eqv det = {eqv_detuning/2/np.pi}")
                         # dont need this line too, or could make some use of it for speeding up the code
                         if max_Hint is None:
                             abs_Hintij = max_Hint_ij
@@ -398,6 +496,8 @@ class obe:
                         E = self._H0_base_diag[j] - self._H0_base_diag[i] #angular
                         
                         eqv_detuning = np.real(E_res - E)
+
+                        
                         
                         if ( eqv_detuning**2 >=  self.test_factor**2 * ( 2 * (rabi *abs_Hintij )**2 + Gamma**2 ) ): #is far from resonance        
                             continue
@@ -424,7 +524,8 @@ class obe:
                     
                 H_real += H_temp_real
                 H_imag += H_temp_imag
-            
+
+
             #LAMBDIFY THE TEMP HAMILTONIANS HERE
             Hint_real_func = se.Lambdify([t_se], H_real, backend = 'llvm', cse = True)
             Hint_imag_func = se.Lambdify([t_se], H_imag, backend = 'llvm', cse = True) 
@@ -434,4 +535,158 @@ class obe:
             myHint.append((Hint_real_func,Hint_imag_func))
         
         return myHint
+    """
+    def electric_static_multiplier(self):
+        coeff_field_shape = 0
+        for static_field in self.E_stat_field:
+            if static_field.shape == 'Unipolar':
+                center = static_field.position
+                sigma = static_field.diameter/4
+                ampl = static_field.E_amplitude
+                beam_shape_factor = ampl.real*unipolar(t_se,center,sigma)
+            elif static_field.shape == 'Bipolar':
+                center = static_field.position
+                sigma = static_field.diameter/4
+                static_field.E_amplitude
+                beam_shape_factor = ampl.real*bipolar(t_se,center,sigma)
+            elif static_field.shape == 'Sinusoidal':
+                center = static_field.position
+                width = static_field.diameter
+                static_field.E_amplitude
+                beam_shape_factor = ampl.real*single_sinusoidal(t_se,center,width)
+            elif static_field.shape == 'Pulse':
+                center = static_field.position
+                dia = static_field.diameter
+                static_field.E_amplitude
+                beam_shape_factor = ampl.real*pulse_se(t_se,center,dia)
+            
+            coeff_field_shape += beam_shape_factor
+
+
+        H_temp_real = se.zeros(self._n_total,self._n_total)
+        H_temp_imag = se.zeros(self._n_total,self._n_total)
+
+        for i in range(self._n_ground):
+            for j in range(i+1,self._n_ground):
+                if self.max_Hstatic[i,j] != 0:
+                    delta = self._H0_base_diag[i] - self._H0_base_diag[j] #GH[i,i]- GH[j,j]
+                    phase = delta*t_se
+                    if np.abs(delta) > 50.0:
+                        continue
+                    # H[i,j] = se.exp(I*t*delta)
+                    
+                    H_temp_real[i,j] =  coeff_field_shape * se.cos(phase)
+                    H_temp_real[j,i] =  coeff_field_shape * se.cos(phase)
+                    H_temp_imag[i,j] =  coeff_field_shape * se.sin(phase)
+                    H_temp_imag[j,i] = -coeff_field_shape * se.sin(phase)
+                    
+
+        for i in range(self._n_ground,self._n_total):
+            for j in range(i+1,self._n_total):
+                if self.max_Hstatic[i,j] != 0:
+                    delta = self._H0_base_diag[i] - self._H0_base_diag[j] #EH[i,i]- EH[j,j]
+                    phase = delta*t_se
+                    if np.abs(delta) > 50.0:
+                        continue
+                    # H[i,j] = se.exp(I*t*delta)
+                    H_temp_real[i,j] =  coeff_field_shape * se.cos(phase)
+                    H_temp_real[j,i] =  coeff_field_shape * se.cos(phase)
+                    H_temp_imag[i,j] =  coeff_field_shape * se.sin(phase)
+                    H_temp_imag[j,i] = -coeff_field_shape * se.sin(phase)
+        
+
+        H_real_func = se.Lambdify([t_se], H_temp_real, backend = 'llvm', cse = True)
+        H_imag_func = se.Lambdify([t_se], H_temp_imag, backend = 'llvm', cse = True)
+
+        return (H_real_func,H_imag_func)
+    """
+
     
+    def electric_static_multiplier(self):
+        start_static = time.time()
+        coeff_field_shape =[]
+        coeff_field_real = []
+        for static_field in self.E_stat_field:
+            if static_field.shape == 'Unipolar':
+                center = static_field.position
+                sigma = static_field.diameter/4
+                if np.isreal(static_field.E_amplitude):
+                    ampl = static_field.E_amplitude
+                else:
+                    ampl = static_field.E_amplitude.imag
+
+                
+                beam_shape_factor = ampl*unipolar(t_se,center,sigma)
+            elif static_field.shape == 'Bipolar':
+                center = static_field.position
+                sigma = static_field.diameter/4
+                v_beam = 616e-4
+                x = 1/v_beam
+                if np.isreal(static_field.E_amplitude):
+                    ampl = static_field.E_amplitude
+                else:
+                    ampl = static_field.E_amplitude.imag
+                beam_shape_factor = ampl*bipolar(t_se,center,sigma,x)
+            elif static_field.shape == 'Static_Gaussian':
+                center = static_field.position
+                sigma = static_field.diameter/4
+                if np.isreal(static_field.E_amplitude):
+                    ampl = static_field.E_amplitude
+                else:
+                    ampl = static_field.E_amplitude.imag
+                beam_shape_factor = ampl*static_gaussian(t_se,center,sigma)
+            elif static_field.shape == 'Sinusoidal':
+                center = static_field.position
+                width = static_field.diameter
+                if np.isreal(static_field.E_amplitude):
+                    ampl = static_field.E_amplitude
+                else:
+                    ampl = static_field.E_amplitude.imag
+                beam_shape_factor = ampl*single_sinusoidal(t_se,center,width)
+            elif static_field.shape == 'Pulse':
+                center = static_field.position
+                dia = static_field.diameter
+                if np.isreal(static_field.E_amplitude):
+                    ampl = static_field.E_amplitude
+                else:
+                    ampl = static_field.E_amplitude.imag
+                beam_shape_factor = ampl*pulse_se(t_se,center,dia)
+            
+            coeff_field_shape.append(beam_shape_factor)
+            if np.isreal(static_field.E_amplitude):
+                coeff_field_real.append(1)
+            else:
+                coeff_field_real.append(0)
+
+        H_temp_real = se.zeros(self._n_total,self._n_total)
+        H_temp_imag = se.zeros(self._n_total,self._n_total)
+
+        for kk,item in enumerate(coeff_field_shape):
+            for i in range(self._n_ground):
+                for j in range(i+1,self._n_ground):
+                    if self.max_Hstatic[i,j] != 0:
+                        delta = self._H0_base_diag[i] - self._H0_base_diag[j] #GH[i,i]- GH[j,j]
+                        phase = delta*t_se
+                        if np.abs(delta) > 2*np.pi*200.0:
+                            continue
+                        # H[i,j] = se.exp(I*t*delta)
+                        
+                        if coeff_field_real[kk] == 1:
+                            H_temp_real[i,j] +=  coeff_field_shape[kk] * se.cos(phase)
+                            H_temp_real[j,i] +=  coeff_field_shape[kk] * se.cos(phase)
+                            H_temp_imag[i,j] +=  coeff_field_shape[kk] * se.sin(phase)
+                            H_temp_imag[j,i] += -coeff_field_shape[kk] * se.sin(phase)
+                        else:
+                            # exp(1j*phase)
+                            H_temp_real[i,j] +=  -coeff_field_shape[kk] * se.sin(phase)
+                            H_temp_real[j,i] +=  coeff_field_shape[kk] *  se.sin(phase)
+                            H_temp_imag[i,j] +=  coeff_field_shape[kk] * se.cos(phase)
+                            H_temp_imag[j,i] +=  coeff_field_shape[kk] * se.cos(phase)
+        
+
+        H_real_func = se.Lambdify([t_se], H_temp_real, backend = 'llvm', cse = True)
+        H_imag_func = se.Lambdify([t_se], H_temp_imag, backend = 'llvm', cse = True)
+        stop_static = time.time()
+        #print(f"Static electric hamiltonian took {(stop_static - start_static) :.3f} s")
+        return (H_real_func,H_imag_func)
+        
