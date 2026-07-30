@@ -8,7 +8,7 @@ import symengine as se
 t_se = se.Symbol("t", real=True)
 
 import numpy as np
-from numba import njit, complex128, int64,prange
+from numba import njit, complex128, int64, prange
 
 import scipy
 from scipy.integrate import solve_ivp
@@ -114,7 +114,8 @@ class Static_Excitation():
     shape : Shape as defined by strings as 
             "Unipolar",
             "Bipolar",
-            "Sinusoidal"    
+            "Sinusoidal",
+            "Pulse"    
     """
     def __init__(self, E_amplitude:float, pol:int, position = None, diameter = None, shape = None):
         self.E_amplitude = E_amplitude #expressed in V/cm
@@ -151,43 +152,85 @@ class obe:
     def __init__(self,E_field,
                     states,  #these are the states corresponding to initial B value
                     H0,      # interpolation function
-                    Hint,    #interpolation function
-                    Hstatic_int, #interpolation function; encapsulates static electric field interaction
+                    Hint,    #interpolation function or list of function
+                    
                     br,      #interpolation function
-                    B_field, # a tuple (B0,grad)
-                    E_stat_field,
+                    
                     test_factor,
                     mode = 'symengine',
+                    #B_field, # a tuple (B0,grad)
+                    #E_stat_field,
+                    #Hstatic_int, #interpolation function; encapsulates static electric field interaction
                     **kwargs): 
-                
+
+        # Optical field checks        
         if isinstance(E_field,Excitation):
             self.E_field = [E_field]
         else:
             self.E_field = E_field
+
+        #Assessing ground and excited states
+        self.ground_states = states[0]
+        self.excited_states = states[1]
+        self._n_ground = len(self.ground_states)
+        self._n_exec = len(self.excited_states)
+        self._n_total = self._n_ground + self._n_exec
+                
+        self._ground_mF_lists = [[s.mF for s in gs.states] for gs in self.ground_states]
+        self._excited_mF_lists = [[s.mF for s in es.states] for es in self.excited_states]
+
+        self.br = br # interpolating function
+
+
+        #Interaction Hamiltonian check. 
+        #Checks for tuple to separate out the real and imaginary terms.
+        #These are broken into real and imag part in a tuple for faster interpolation computation
+        if isinstance(Hint,tuple):
+            self.Hint_list = [Hint]
+        else:
+            self.Hint_list = Hint
+
+        self.test_factor=test_factor
+        self.mode = mode
+
+
+        #Read the kwargs
+        #The allowed kwargs are
+        #a. B_field : sent as a tuple or as a list. The first element is the initial amg field, second element is the gradient of the field in terms of microsecond.
+        #b.Hstatic_int : the interpolation Hamiltonian function for a static electric field. Unlike the magnetic field, this is not used to diagonalize the system hamiltonian but acts as a interaction term
+        #c. E_stat_field : Static_Excitation class, containing static electric field information.
+
+        self.__dict__.update(kwargs)
+        self.overall_envelope = kwargs.get('overall_envelope', None)
+        
+
+        B_field = kwargs.get('B_field', (0,0))
+        E_stat_field = kwargs.get('E_stat_field', None)
+        Hstatic_int = kwargs.get('Hstatic_int', None)
+
+        
+
 
         if isinstance(E_stat_field,Static_Excitation):
             self.E_stat_field = [E_stat_field]
         else:
             self.E_stat_field = E_stat_field
 
+        if E_stat_field:
+            self.H_static_multiplier = self.electric_static_multiplier()
+        else:
+            self.H_static_multiplier = [lambda var: 0,lambda var: 0]
+
         self.B0 = B_field[0]  
         self.grad = B_field[1]  
         
-        self.ground_states = states[0]
-        self.excited_states = states[1]
-        self._n_ground = len(self.ground_states)
-        self._n_exec = len(self.excited_states)
-        self._n_total = self._n_ground + self._n_exec
         
-        if isinstance(Hint,tuple):
-            self.Hint_list = [Hint]
-        else:
-            self.Hint_list = Hint
+        
+        
 
         
-        self.test_factor=test_factor
-        self.mode = mode
-        self.__dict__.update(kwargs)
+        
+        
 
 
         self.H0 = H0 # interpolating function. Array of size _n_total x _n_total
@@ -201,10 +244,7 @@ class obe:
         
 
 
-        if E_stat_field:
-            self.H_static_multiplier = self.electric_static_multiplier()
-        else:
-            self.H_static_multiplier = [0,0]
+        
 
         self.scipy_symengine_multiplication = 0
         self.commutator_time_mult = 0
@@ -220,10 +260,7 @@ class obe:
         self.decay_matrix = Gamma * A 
         self.decay_matrix_diag = np.ascontiguousarray(np.diag(self.decay_matrix))
         
-        self.br = br # interpolating function
         
-        self._ground_mF_lists = [[s.mF for s in gs.states] for gs in self.ground_states]
-        self._excited_mF_lists = [[s.mF for s in es.states] for es in self.excited_states]
         
         
         if mode == 'symengine':
@@ -334,7 +371,10 @@ class obe:
 
             #Extract the static electric field interaction
             #H_static_electric is a real Hamiltonian 
-            H_static_electric_interpol = 2*np.pi*self.get_interp_array(self.Hstatic_int,(self._n_total,self._n_total),B)
+            if self.Hstatic_int:
+                H_static_electric_interpol = 2*np.pi*self.get_interp_array(self.Hstatic_int,(self._n_total,self._n_total),B)
+            else:
+                H_static_electric_interpol = 0
 
             #print(f"[{np.round(T,3)},  {np.round(H_static_electric[3,4],5)}]")
             H_static_electric_lambda = self.H_static_multiplier[0](T) +1.0j * self.H_static_multiplier[1](T)
@@ -535,71 +575,6 @@ class obe:
             myHint.append((Hint_real_func,Hint_imag_func))
         
         return myHint
-    """
-    def electric_static_multiplier(self):
-        coeff_field_shape = 0
-        for static_field in self.E_stat_field:
-            if static_field.shape == 'Unipolar':
-                center = static_field.position
-                sigma = static_field.diameter/4
-                ampl = static_field.E_amplitude
-                beam_shape_factor = ampl.real*unipolar(t_se,center,sigma)
-            elif static_field.shape == 'Bipolar':
-                center = static_field.position
-                sigma = static_field.diameter/4
-                static_field.E_amplitude
-                beam_shape_factor = ampl.real*bipolar(t_se,center,sigma)
-            elif static_field.shape == 'Sinusoidal':
-                center = static_field.position
-                width = static_field.diameter
-                static_field.E_amplitude
-                beam_shape_factor = ampl.real*single_sinusoidal(t_se,center,width)
-            elif static_field.shape == 'Pulse':
-                center = static_field.position
-                dia = static_field.diameter
-                static_field.E_amplitude
-                beam_shape_factor = ampl.real*pulse_se(t_se,center,dia)
-            
-            coeff_field_shape += beam_shape_factor
-
-
-        H_temp_real = se.zeros(self._n_total,self._n_total)
-        H_temp_imag = se.zeros(self._n_total,self._n_total)
-
-        for i in range(self._n_ground):
-            for j in range(i+1,self._n_ground):
-                if self.max_Hstatic[i,j] != 0:
-                    delta = self._H0_base_diag[i] - self._H0_base_diag[j] #GH[i,i]- GH[j,j]
-                    phase = delta*t_se
-                    if np.abs(delta) > 50.0:
-                        continue
-                    # H[i,j] = se.exp(I*t*delta)
-                    
-                    H_temp_real[i,j] =  coeff_field_shape * se.cos(phase)
-                    H_temp_real[j,i] =  coeff_field_shape * se.cos(phase)
-                    H_temp_imag[i,j] =  coeff_field_shape * se.sin(phase)
-                    H_temp_imag[j,i] = -coeff_field_shape * se.sin(phase)
-                    
-
-        for i in range(self._n_ground,self._n_total):
-            for j in range(i+1,self._n_total):
-                if self.max_Hstatic[i,j] != 0:
-                    delta = self._H0_base_diag[i] - self._H0_base_diag[j] #EH[i,i]- EH[j,j]
-                    phase = delta*t_se
-                    if np.abs(delta) > 50.0:
-                        continue
-                    # H[i,j] = se.exp(I*t*delta)
-                    H_temp_real[i,j] =  coeff_field_shape * se.cos(phase)
-                    H_temp_real[j,i] =  coeff_field_shape * se.cos(phase)
-                    H_temp_imag[i,j] =  coeff_field_shape * se.sin(phase)
-                    H_temp_imag[j,i] = -coeff_field_shape * se.sin(phase)
-        
-
-        H_real_func = se.Lambdify([t_se], H_temp_real, backend = 'llvm', cse = True)
-        H_imag_func = se.Lambdify([t_se], H_temp_imag, backend = 'llvm', cse = True)
-
-        return (H_real_func,H_imag_func)
-    """
 
     
     def electric_static_multiplier(self):

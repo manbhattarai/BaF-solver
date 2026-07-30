@@ -8,8 +8,6 @@ cdef double I2_ = <double>I2
 
 from .fast_wigners import wigner_6j,wigner_3j,wigner_9j
 
-#conditional import
-#from molecular_parameters import *
 
 """
 import ctypes
