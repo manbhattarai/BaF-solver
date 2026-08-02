@@ -202,7 +202,7 @@ class obe:
 
         self.__dict__.update(kwargs)
         self.overall_envelope = kwargs.get('overall_envelope', None)
-        
+
 
         B_field = kwargs.get('B_field', (0,0))
         E_stat_field = kwargs.get('E_stat_field', None)
@@ -447,14 +447,6 @@ class obe:
             result = np.array(result.y).T
             #print("")
         
-        elif package == 'Julia':
-
-            start = time.perf_counter()
-            prob = de.ODEProblem(Rdot_julia,r_init.flatten(),(tinterval[0],tinterval[-1]))
-
-            temp_result = de.solve(prob,de.Tsit5(),reltol=1e-3,abstol=1e-6) #DP5()
-            result = temp_result.u
-            print(f"Julia solving took {time.perf_counter() - start} s.")
         
         #print(f"Magnetic field final : {B} G.")
         if 1 == 0:
