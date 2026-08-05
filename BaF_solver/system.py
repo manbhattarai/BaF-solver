@@ -14,7 +14,7 @@ import time
 
 class System():
     """ What does the system class contain!"""
-    def __init__(self,N_sigma,J_pi,B_field = [0,0,0],E_stat_field = [0,0,0],ignore_mF = False):
+    def __init__(self,N_sigma,J_pi,B_field = [0,0,0],E_stat_field = [0,0,0],isotope = 137,ignore_mF = False):
         """
         J_pi is a string or a list of string where each element is of the form 'J-' or 'J+' where 
         J is the total angular momentum and the sign following is the parity
@@ -33,13 +33,38 @@ class System():
         
         if E_stat_field:
             self.E_stat_field = E_stat_field
+
+
+        
+
+        #Create a dictionary of spin parameters. I want to keep it local and send it as param to the state generating function
+        spin_params = {
+                        "S" : S,
+                        "I1" : I1,
+                        "I2" : I2,
+                        "LAMBDA" : LAMBDA,
+                        "SIGMA" : SIGMA,
+                        "OMEGA" : OMEGA,
+        }
+        #Assign I1 based on isotope
+        match isotope:
+            case 138:
+                spin_params["I1"] = 0
+            case 137:
+                spin_params["I1"] = 3/2
+            case 136:
+                spin_params["I1"] = 0
+            case 135:
+                spin_params["I1"] = 3/2
+        #print(I1)
+        
         
         self.sigma_states = []
         self.pi_states = []
         self.F_plus_sigma_all = []
         self.F_plus_pi_all = []
-        self.generate_sigma_states(ignore_mF = ignore_mF)
-        self.generate_pi_states(ignore_mF = ignore_mF)
+        self.generate_sigma_states(spin_params,ignore_mF = ignore_mF)
+        self.generate_pi_states(spin_params,ignore_mF = ignore_mF)
         
 
         self.sigma_Hamiltonian = SigmaHamiltonian(self.sigma_states,self.F_plus_sigma_all,self.B_field,self.E_stat_field)
@@ -49,19 +74,29 @@ class System():
         self.branching_ratios = None
         #self.amu = amu
     
-    def generate_sigma_states(self,ignore_mF = False):
+    
+    def generate_sigma_states(self,spin_params,ignore_mF = False):
         """Use ignore_mF = True to generatte states without mFs"""
+        S, I1, I2, LAMBDA, SIGMA, OMEGA = (
+                                            spin_params["S"],
+                                            spin_params["I1"],
+                                            spin_params["I2"],
+                                            spin_params["LAMBDA"],
+                                            spin_params["SIGMA"],
+                                            spin_params["OMEGA"]
+        )
+        #print(f"I1 = {I1}")
         for N in self.N_list:
             for G in np.arange(np.abs(I1-S),I1+S+1):
                 for F1 in np.arange(np.abs(N-G),N+G+1):
                     for F in np.arange(np.abs(F1-I2),F1+I2+1):
                         if ignore_mF:
-                            self.sigma_states.append(SigmaLevel(G,N,F1,F))
+                            self.sigma_states.append(SigmaLevel(S,I1,G,N,F1,I2,F))
                         else:
                             #construct the rotation matrix here for 
                             self.F_plus_sigma_all.append(self.create_F_plus(F))
                             for mF in np.arange(-F,F+1):
-                                self.sigma_states.append(SigmaLevel(G,N,F1,F,mF))
+                                self.sigma_states.append(SigmaLevel(S,I1,G,N,F1,I2,F,mF))
     
     @staticmethod
     def create_F_plus(F):
@@ -75,8 +110,15 @@ class System():
         return F_plus
     
     
-    def generate_pi_states(self,ignore_mF = False):
+    def generate_pi_states(self,spin_params,ignore_mF = False):
         """Use ignore_mF = True to generatte states without mFs"""
+        S, I1, I2, LAMBDA, SIGMA, OMEGA = (spin_params["S"],
+                                            spin_params["I1"],
+                                            spin_params["I2"],
+                                            spin_params["LAMBDA"],
+                                            spin_params["SIGMA"],
+                                            spin_params["OMEGA"]
+        )
         for J_str in self.J_list:
             if J_str[-1] == '+':
                 parity = 1
@@ -86,12 +128,12 @@ class System():
             for F1 in np.arange(np.abs(J-I1),J+I1+1):
                 for F in np.arange(np.abs(F1-I2),F1+I2+1):
                     if ignore_mF:
-                        self.pi_states.append(PiLevelParity(parity,J,F1,F))
+                        self.pi_states.append(PiLevelParity(LAMBDA,SIGMA,OMEGA,parity,S,J,I1,F1,I2,F))
                     else:
                         #construct the rotation matrix here for 
                         self.F_plus_pi_all.append(self.create_F_plus(F))
                         for mF in np.arange(-F,F+1):
-                            self.pi_states.append(PiLevelParity(parity,J,F1,F,mF))
+                            self.pi_states.append(PiLevelParity(LAMBDA,SIGMA,OMEGA,parity,S,J,I1,F1,I2,F,mF))
                         
 
     

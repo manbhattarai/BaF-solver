@@ -1,11 +1,11 @@
 import numpy as np
 from .states import SigmaLevel,PiLevelParity,PiLevelOmega,Superposition
-from .spin_params import *
+
 from .fast_wigners import wigner_6j,wigner_3j,wigner_9j
 from functools import lru_cache
 from .interaction import H_int_omega_optimized
 
-from .molecular_parameters import *
+from .molecular_parameters_137 import *
 
 @lru_cache(maxsize=None)
 def kdel(x,y):
@@ -54,6 +54,7 @@ def H_int_omega(state1:SigmaLevel, state2:PiLevelOmega, pol=0):    #pol conventi
                                         state2.parity_state.F1, \
                                         state2.parity_state.F, \
                                         state2.parity_state.mF
+    S,I1,I2 = state1.S,state1.I1,state1.I2
     val=0
 
     val_before_J_loop = ((-1)**(G+S+I1)*np.sqrt(2*N+1)*
@@ -141,8 +142,8 @@ def H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, pol=0):    #po
 @lru_cache(maxsize=None)     
 def H0_sigma(state1: SigmaLevel,state2: SigmaLevel):
     state = (
-            state1.G,state1.N,state1.F1,state1.F,state1.mF,
-            state2.G,state2.N,state2.F1,state2.F,state2.mF
+            state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF,
+            state2.S,state2.I1,state2.G,state2.N,state2.F1,state2.I2,state2.F,state2.mF
             )
             
     return  HN(state)+       \
@@ -157,8 +158,8 @@ def H0_sigma(state1: SigmaLevel,state2: SigmaLevel):
 @lru_cache(maxsize=None)
 def HZeeman_sigma(state1: SigmaLevel,state2: SigmaLevel):
     state = (
-            state1.G,state1.N,state1.F1,state1.F,state1.mF,
-            state2.G,state2.N,state2.F1,state2.F,state2.mF
+            state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF,
+            state2.S,state2.I1,state2.G,state2.N,state2.F1,state2.I2,state2.F,state2.mF
             )
             
     return HgrZS(state)+ \
@@ -170,8 +171,8 @@ def HZeeman_sigma(state1: SigmaLevel,state2: SigmaLevel):
 @lru_cache(maxsize=None)
 def HStark_sigma(state1: SigmaLevel,state2: SigmaLevel):
     state = (
-            state1.G,state1.N,state1.F1,state1.F,state1.mF,
-            state2.G,state2.N,state2.F1,state2.F,state2.mF
+            state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF,
+            state2.S,state2.I1,state2.G,state2.N,state2.F1,state2.I2,state2.F,state2.mF
             )
     return Hgr_Stark(state)
     
@@ -190,17 +191,23 @@ def H0_pi_parity_basis(state1:PiLevelParity, state2:PiLevelParity):
                     
     return val                       
 
-                             
+#LAMBDA,SIGMA,OMEGA,parity,S,J,I1,F1,I2,F,mF=None                             
 def H0_pi_omega_basis(state1: PiLevelOmega,state2: PiLevelOmega):
     state = (
             state1.Lambda,state1.Sigma,state1.Omega,
+            state1.parity_state.S,
             state1.parity_state.J,
+            state1.parity_state.I1,
             state1.parity_state.F1,
+            state1.parity_state.I2,
             state1.parity_state.F,
             state1.parity_state.mF,
             state2.Lambda,state2.Sigma,state2.Omega,
+            state2.parity_state.S,
             state2.parity_state.J,
+            state2.parity_state.I1,
             state2.parity_state.F1,
+            state2.parity_state.I2,
             state2.parity_state.F,
             state2.parity_state.mF
             )
@@ -242,17 +249,23 @@ def HStark_pi_parity_basis(state1,state2):
 
 def HZeeman_pi_omega_basis(state1: PiLevelOmega,state2: PiLevelOmega):
     state = (
-            state1.Lambda,state1.Sigma,state1.Omega,
-            state1.parity_state.J,
-            state1.parity_state.F1,
-            state1.parity_state.F,
-            state1.parity_state.mF,
-            state2.Lambda,state2.Sigma,state2.Omega,
-            state2.parity_state.J,
-            state2.parity_state.F1,
-            state2.parity_state.F,
-            state2.parity_state.mF
-            )
+                state1.Lambda,state1.Sigma,state1.Omega,
+                state1.parity_state.S,
+                state1.parity_state.J,
+                state1.parity_state.I1,
+                state1.parity_state.F1,
+                state1.parity_state.I2,
+                state1.parity_state.F,
+                state1.parity_state.mF,
+                state2.Lambda,state2.Sigma,state2.Omega,
+                state2.parity_state.S,
+                state2.parity_state.J,
+                state2.parity_state.I1,
+                state2.parity_state.F1,
+                state2.parity_state.I2,
+                state2.parity_state.F,
+                state2.parity_state.mF
+                )
     
     return  1*HZL(state)+ \
             1*HexZS(state)+ \
@@ -262,17 +275,23 @@ def HZeeman_pi_omega_basis(state1: PiLevelOmega,state2: PiLevelOmega):
 
 def HStark_pi_omega_basis(state1: PiLevelOmega,state2: PiLevelOmega):
     state = (
-            state1.Lambda,state1.Sigma,state1.Omega,
-            state1.parity_state.J,
-            state1.parity_state.F1,
-            state1.parity_state.F,
-            state1.parity_state.mF,
-            state2.Lambda,state2.Sigma,state2.Omega,
-            state2.parity_state.J,
-            state2.parity_state.F1,
-            state2.parity_state.F,
-            state2.parity_state.mF
-            )
+                state1.Lambda,state1.Sigma,state1.Omega,
+                state1.parity_state.S,
+                state1.parity_state.J,
+                state1.parity_state.I1,
+                state1.parity_state.F1,
+                state1.parity_state.I2,
+                state1.parity_state.F,
+                state1.parity_state.mF,
+                state2.Lambda,state2.Sigma,state2.Omega,
+                state2.parity_state.S,
+                state2.parity_state.J,
+                state2.parity_state.I1,
+                state2.parity_state.F1,
+                state2.parity_state.I2,
+                state2.parity_state.F,
+                state2.parity_state.mF
+                )
     
     return  Hex_Stark(state)
                                 
@@ -280,14 +299,14 @@ def HStark_pi_omega_basis(state1: PiLevelOmega,state2: PiLevelOmega):
 ############################################# Bare Hamiltonian Sigma ##################################################
 
 def HN(state):
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (kdel(mF,mFp)*kdel(F,Fp)*kdel(F1,F1p)*kdel(N,Np)*kdel(G,Gp)*
             (BN*N*(N+1)-DN*N**2*(N+1)**2)
             )
 
 
 def HNS(state):
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return ((gamma+delta_gamma*N*(N+1))*kdel(mF,mFp)*kdel(F,Fp)*kdel(F1,F1p)*kdel(N,Np)*
             reduced(N)*reduced(S)*nreduced(G,Gp)*
             (-1)**(F1+I1+N+S+1+Gp+Gp)*
@@ -295,12 +314,12 @@ def HNS(state):
 
 
 def HFBa(state):
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return bFBa/2*kdel(mF,mFp)*kdel(F,Fp)*kdel(F1,F1p)*kdel(N,Np)*kdel(G,Gp)* \
            (G*(G+1)-S*(S+1)-I1*(I1+1))
 
 def HCBa(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val=0.0
     for J in np.arange(np.abs(N-S),N+S+1):
         for Jp in np.arange(np.abs(Np-S),Np+S+1):
@@ -315,7 +334,7 @@ def HCBa(state): #checked
 
 
 def HCBa_optimized(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val=0.0
     pre_factor = (-1)**(G+Gp+S+I1+I1+F1+I1)
     for J in np.arange(np.abs(N-S),N+S+1):
@@ -337,7 +356,7 @@ def HCBa_optimized(state): #checked
 
 
 def HQ(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp) = state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val = 0
     if wigner_3j(I1,2,I1,-I1,0,I1) == 0:
         return 0
@@ -353,7 +372,7 @@ def HQ(state): #checked
 
 
 def HFF(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (bFF*kdel(mF,mFp)*kdel(F,Fp)*kdel(N,Np)*
             (-1)**(F+I2+N+G+Gp+I1+S+F1p+F1p)*
             nreduced(G,Gp)*nreduced(F1,F1p)*reduced(I2)*reduced(S)*
@@ -379,7 +398,7 @@ def HCF(state): #updated
             wigner_3j(N,2,Np,0,0,0)*val)
 
 def HCF_optimized(state): #updated
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val=0
     pre_factor = (-1)**(G+Gp+S+I1+I1+F1p+F1p+F+I2+I1+1)*wigner_6j(I2,F1p,F,F1,I2,1)
     for J in np.arange(np.abs(N-S),N+S+1):
@@ -401,13 +420,13 @@ def HCF_optimized(state): #updated
 
 #Considered for SrF
 def HNI(state):
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (cI*kdel(mF,mFp)*kdel(F,Fp)*kdel(F1,F1p)*kdel(N,Np)*reduced(N)*reduced(I1)*nreduced(G,Gp)*(-1)**(G+Gp+F1+N+S+I1+1)
             *wigner_6j(Np,Gp,F1,G,N,1)*wigner_6j(I1,Gp,S,G,I1,1))
 
 ####################################### Zeeman Hamiltonian sigma state ##########################################################
 def HgrZS(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (gS*uB*(-1)**(F-mF)*wigner_3j(F,1,Fp,-mF,0,mFp)*
             (-1)**(Fp+I2+F1+1)*nreduced(F,Fp)*nreduced(F1,F1p)*nreduced(G,Gp)*
             (-1)**(F1p+N+G+1)*kdel(N,Np)*wigner_6j(F1p,Fp,I2,F,F1,1)*
@@ -416,7 +435,7 @@ def HgrZS(state): #checked
             wigner_6j(S,Gp,I1,G,S,1)*reduced(S))
 
 def HgrZI1(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (-gI1*uN*(-1)**(F-mF)*wigner_3j(F,1,Fp,-mF,0,mFp)*
             (-1)**(Fp+I2+F1+1)*nreduced(F,Fp)*nreduced(F1,F1p)*nreduced(G,Gp)*
             (-1)**(F1p+N+G+1)*kdel(N,Np)*wigner_6j(F1p,Fp,I2,F,F1,1)*wigner_6j(Gp,F1p,N,F1,G,1)*
@@ -424,20 +443,20 @@ def HgrZI1(state): #checked
             wigner_6j(I1,Gp,S,G,I1,1)*reduced(I1))
 
 def HgrZI2(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (-gI2*uN*(-1)**(F-mF)*wigner_3j(F,1,Fp,-mF,0,mFp)*
             (-1)**(F+I2+F1+1)*nreduced(F,Fp)*kdel(F1,F1p)*kdel(N,Np)*kdel(G,Gp)
             *wigner_6j(I2,Fp,F1,F,I2,1)*reduced(I2))
 
 def HgrZN(state): #checked
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     return (-grot*uN*(-1)**(F-mF)*wigner_3j(F,1,Fp,-mF,0,mFp)*
             (-1)**(Fp+I2+F1+1)*nreduced(F,Fp)*nreduced(F1,F1p)
             *wigner_6j(F1p,Fp,I2,F,F1,1)*kdel(G,Gp)*
             (-1)**(F1+Np+G+1)*wigner_6j(Np,F1p,G,F1,N,1)*reduced(N)*kdel(N,Np))
 
 def HgrZgl(state): #updated
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val=0
     for J in np.arange(np.abs(N-S),N+S+1):
         for Jp in np.arange(np.abs(Np-S),Np+S+1):
@@ -457,7 +476,7 @@ def HgrZgl(state): #updated
     return val*gl*uB
 
 def HgrZgl_optimized(state): #updated
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp)=state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val=0
     pre_factor = ((-1)**(F-mF)*wigner_3j(F,1,Fp,-mF,0,mFp)*
                     (-1)**(Fp+I2+F1+1)*nreduced(F,Fp)*
@@ -489,7 +508,7 @@ def HgrZgl_optimized(state): #updated
 
 ################################################## Stark Hamiltonian Sigma State ###############################################
 def Hgr_Stark(state):
-    (G,N,F1,F,mF,Gp,Np,F1p,Fp,mFp) = state
+    (S,I1,G,N,F1,I2,F,mF,S,I1,Gp,Np,F1p,I2,Fp,mFp)=state
     val = 0.0
     for J in np.arange(np.abs(N-S),N+S+1):
         for Jp in np.arange(np.abs(Np-S),Np+S+1):
@@ -514,7 +533,7 @@ def Hgr_Stark(state):
 #################################################################################################################################
 
 def HBa_d_new(state): #test against the derived result
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     term1 = kdel(Lambda,Lambdap+2)* wigner_3j(S,1,S,-Sigma,-1,Sigmap)*wigner_3j(J,1,Jp,-Omega,1,Omegap)
     term2 = kdel(Lambda,Lambdap-2)* wigner_3j(S,1,S,-Sigma,1,Sigmap)*wigner_3j(J,1,Jp,-Omega,-1,Omegap)
     T1SC_term = d_Ba*(-1)**(S - Sigma + J - Omega)*nreduced(J,Jp)*reduced(S)*(term1+term2)
@@ -522,13 +541,13 @@ def HBa_d_new(state): #test against the derived result
     return T1SC_term*lab_frame_term
 
 def HBa_h_new(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     lab_frame_term = (-1)**(Jp+F1+I1)*kdel(F,Fp)*kdel(mF,mFp)*kdel(F1,F1p)*wigner_6j(I1,Jp,F1,J,I1,1)*reduced(I1)
     T1L = h_Ba_12*Lambdap*kdel(Lambda,Lambdap)*(-1)**(J-Omega)*wigner_3j(J,1,Jp,-Omega,0,Omegap)*nreduced(J,Jp)
     return lab_frame_term*T1L
 
 def HexQ(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     if J == 1/2 and Jp == 1/2:
         return 0
     elif I1 == 0:
@@ -539,7 +558,7 @@ def HexQ(state):
                )
 
 def HF_h_new(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     lab_frame_term = ((-1)**(2*F1p+I1+I2+F+J+1)*nreduced(F1,F1p)*reduced(I2)*
                         wigner_6j(Jp,F1p,I1,F1,J,1)*wigner_6j(I2,F1p,F,F1,I2,1)
                         )*kdel(mF,mFp)*kdel(F,Fp)
@@ -547,7 +566,7 @@ def HF_h_new(state):
     return T1L*lab_frame_term
 
 def HF_d_new(state): #test against the derived result
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     term1 = kdel(Lambda,Lambdap+2)* wigner_3j(S,1,S,-Sigma,-1,Sigmap)*wigner_3j(J,1,Jp,-Omega,1,Omegap)
     term2 = kdel(Lambda,Lambdap-2)* wigner_3j(S,1,S,-Sigma,1,Sigmap)*wigner_3j(J,1,Jp,-Omega,-1,Omegap)
     T1SC_term = d_F*(-1)**(S - Sigma + J - Omega)*nreduced(J,Jp)*reduced(S)*(term1+term2)
@@ -561,12 +580,12 @@ def HF_d_new(state): #test against the derived result
 
 
 def HexLS(state): #checked
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     return A*Lambda*Sigma*kdel(Lambda,Lambdap)*kdel(Sigma,Sigmap)*kdel(F1,F1p)*kdel(F,Fp)*kdel(mF,mFp)*kdel(J,Jp)
 
 
 def HexR_cor_Brown(state):  #corrected follwoing Brown and Carrington
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     valJS=0
     for q in [-1,1]:
         valJS += kdel(Lambda,Lambdap)*kdel(J,Jp)*(-1)**(S-Sigma+J-Omega)*wigner_3j(S,1,S,-Sigma,q,Sigmap)*wigner_3j(J,1,Jp,-Omega,q,Omegap)*reduced(J)*reduced(S)
@@ -575,11 +594,11 @@ def HexR_cor_Brown(state):  #corrected follwoing Brown and Carrington
 
 
 def HexLS_CD(state): #checked
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     return AD/2*Lambda*(Sigma+Sigmap)*HexR_cor_Brown(state)/Bex
 
 def Hexpq(state):   #checked from Brown and carrington Page 618
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     val=0
     for q in [-1,1]:
         val += (kdel(Lambda,-2*q+Lambdap)*wigner_3j(S,1,S,-Sigma,q,Sigmap)
@@ -593,7 +612,7 @@ def Hexpq(state):   #checked from Brown and carrington Page 618
 
 ################################### Zeeman Hamiltonian Pi state ################################################################
 def HZL(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     return (gLp*uB*(-1)**(F-mF)*wigner_3j(F,1,Fp,-mF,0,mFp)*
             (-1)**(Fp+I2+F1)*nreduced(F,Fp)*wigner_6j(F1p,Fp,I2,F,F1,1)*
            (-1)**(F1p+J+I1)*nreduced(F1,F1p)*wigner_6j(Jp,F1p,I1,F1,J,1)*
@@ -601,7 +620,7 @@ def HZL(state):
            nreduced(J,Jp)*Lambdap*kdel(Lambda,Lambdap)*kdel(Sigma,Sigmap))
 
 def HexZS(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     val=0
     for q in [-1,0,1]:
         val += (-1)**(J-Omega)*wigner_3j(J,1,Jp,-Omega,q,Omegap)* \
@@ -612,21 +631,21 @@ def HexZS(state):
             val*nreduced(J,Jp)*reduced(S))
 
 def HexZI2(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp) = state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     return (-gI2*uN*kdel(Lambda,Lambdap)*kdel(Sigma,Sigmap)*kdel(Omega,Omegap)*
             kdel(J,Jp)*kdel(F1,F1p)*
             (-1)**(F-mF+F+I2+F1+1)*wigner_3j(F,1,Fp,-mF,0,mFp)*nreduced(F,Fp)*
             wigner_6j(I2,Fp,F1,F,I2,1)*reduced(I2))
 
 def HexZI1(state): 
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp) = state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     return (-gI1*uN*kdel(Lambda,Lambdap)*kdel(Sigma,Sigmap)*kdel(Omega,Omegap)*
             (-1)**(F-mF+Fp+I2+F1+1)*wigner_3j(F,1,Fp,-mF,0,mFp)*
             nreduced(F,Fp)*wigner_6j(F1p,Fp,I2,F,F1,1)*
             (-1)**(F1+J+I1+1)*nreduced(F1,F1p)*kdel(J,Jp)*wigner_6j(I1,F1p,J,F1,I1,1)*reduced(I1))
 
 def HZglp(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     val=0
     for q in [-1,1]:
         val += (-1)**(J-Omega)*wigner_3j(J,1,Jp,-Omega,-q,Omegap)* \
@@ -639,7 +658,7 @@ def HZglp(state):
 
 ############################################## Stark Pi state Hamiltonian #############################################################
 def Hex_Stark(state):
-    (Lambda,Sigma,Omega,J,F1,F,mF,Lambdap,Sigmap,Omegap,Jp,F1p,Fp,mFp)=state
+    (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
     val =  ( (-1)**(F-mF) * wigner_3j(F,1,Fp,-mF,0,mFp)*
             (-1)**(Fp+I2+F1+1)*nreduced(F,Fp)*wigner_6j(F1p,Fp,I2,F,F1,1)*
             (-1)**(F1p+I1+J+1)*nreduced(F1,F1p)*wigner_6j(Jp,F1p,I1,F1,J,1)*

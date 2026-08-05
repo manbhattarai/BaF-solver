@@ -1,13 +1,20 @@
 import numpy as np
-from .spin_params import S,LAMBDA,SIGMA,OMEGA,I1,I2
+#from .spin_params import S,LAMBDA,SIGMA,OMEGA,I1,I2
 from .fast_wigners import wigner_6j
 class SigmaLevel:
-    def __init__(self,G,N,F1,F,mF=None):
+    def __init__(self,S,I1,G,N,F1,I2,F,mF=None):
+        #Important to display
         self.G = G
         self.N = N
         self.F1 = F1
         self.F = F
-        self.mF = mF    
+        self.mF = mF
+
+        #Not so important to display
+        self.S = S
+        self.I1 = I1
+        self.I2 = I2
+            
         
     def __repr__(self):
         return f"|G = {self.G}, N = {self.N}, F1 = {self.F1}, F = {self.F}, mF = {self.mF}>"
@@ -29,14 +36,14 @@ class SigmaLevel:
     
     def GtoJ(self) -> 'Superposition':
         #Define the J variable
-        J_list = np.arange(np.abs(self.N-S),self.N+S+1)
+        J_list = np.arange(np.abs(self.N-self.S),self.N+self.S+1)
         ampl_list = []
         state_list = []
         for J in J_list:
             ampl = (2*J+1)**0.5*\
                     (2*self.G+1)**0.5*\
-                    wigner_6j(self.F1,self.G,self.N,S,J,I1)*\
-                    (-1)**(self.G+S+I1)
+                    wigner_6j(self.F1,self.G,self.N,self.S,J,self.I1)*\
+                    (-1)**(self.G+self.S+self.I1)
             state = SigmaLevel_J(self.N,J,self.F1,self.F,self.mF)
             
             ampl_list.append(ampl)
@@ -118,12 +125,23 @@ class SigmaLevel_uncoupled:
 
 
 class PiLevelParity:
-    def __init__(self,parity,J,F1,F,mF=None):
+    def __init__(self,LAMBDA,SIGMA,OMEGA,parity,S,J,I1,F1,I2,F,mF=None):
+        #Relevent for the parity states
         self.J = J
         self.F1 = F1
         self.F = F
         self.mF = mF
         self.parity = parity
+        
+        #Not so important to display
+        self.S = S
+        self.I1 = I1
+        self.I2 = I2
+
+        # With conventional signs
+        self.LAMBDA = LAMBDA
+        self.SIGMA = SIGMA
+        self.OMEGA = OMEGA
           
         
     def __str__(self):
@@ -153,9 +171,9 @@ class PiLevelParity:
         return hash((self.J,self.F1,self.F,self.mF,self.parity))
         
     def parity_to_omega(self):
-        state1 = PiLevelOmega(LAMBDA,SIGMA,OMEGA,self)
-        state2 = PiLevelOmega(-LAMBDA,-SIGMA,-OMEGA,self)
-        return Superposition([1/np.sqrt(2),1/np.sqrt(2)*self.parity*(-1)**(self.J-S)],[state1,state2]) 
+        state1 = PiLevelOmega(self.LAMBDA,self.SIGMA,self.OMEGA,self)
+        state2 = PiLevelOmega(-self.LAMBDA,-self.SIGMA,-self.OMEGA,self)
+        return Superposition([1/np.sqrt(2),1/np.sqrt(2)*self.parity*(-1)**(self.J-self.S)],[state1,state2]) 
         
         
 

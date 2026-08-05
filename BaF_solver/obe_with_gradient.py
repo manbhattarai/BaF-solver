@@ -14,7 +14,7 @@ import scipy
 from scipy.integrate import solve_ivp
 from scipy.integrate import odeint
 
-from .molecular_parameters import Gamma;
+from .molecular_parameters_137 import Gamma;
 Gamma *= 2*np.pi
 
 import warnings
