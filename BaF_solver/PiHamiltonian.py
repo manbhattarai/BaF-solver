@@ -6,11 +6,12 @@ from .molecular_parameters_137 import T00
 import time
 
 class PiHamiltonian():
-    def __init__(self,states,F_plus,B_field,E_stat_field):
+    def __init__(self,states,F_plus,B_field,E_stat_field,params):
         self.bare = []
         #print("F_plus", F_plus)
-        self.Zeeman = self.Zeeman(states,F_plus,B_field)
-        self.Stark = self.Stark(states,F_plus,E_stat_field)
+        self.params = params
+        self.Zeeman = self.Zeeman(states,F_plus,B_field,params)
+        self.Stark = self.Stark(states,F_plus,E_stat_field,params)
         self.states = states
         self.diagonalized_states = []
         self.diagonalized_Hamiltonian = None
@@ -20,10 +21,11 @@ class PiHamiltonian():
         self.diagonalized_states_as_vectors = []
     
     class Zeeman():
-        def __init__(self,states,F_plus,B_field):
+        def __init__(self,states,F_plus,B_field,params):
             self.Nlevels = len(states)
             self.states = states
             self.B_field = B_field
+            self.params = params
             #print(self.states)
             
             self.F_plus,self.F_minus = self.create_ladder_operators(F_plus)
@@ -56,7 +58,7 @@ class PiHamiltonian():
             
             for row in range(self.Nlevels):
                 for col in range(row+1):
-                    temp_val = HZeeman_pi_parity_basis(self.states[row],self.states[col])
+                    temp_val = HZeeman_pi_parity_basis(self.states[row],self.states[col],self.params)
                     HZ[row,col] = temp_val
                     if row != col:
                         HZ[col,row] = temp_val.conj() ##############################################conjugated!
@@ -82,9 +84,10 @@ class PiHamiltonian():
                 self.Y = np.zeros_like(HZ)
             
     class Stark():
-        def __init__(self,states,F_plus,E_stat_field):
+        def __init__(self,states,F_plus,E_stat_field,params):
             self.Nlevels = len(states)
             self.states = states
+            self.params = params
             self.E_stat_field = E_stat_field
             #print(self.states)
             
@@ -118,7 +121,7 @@ class PiHamiltonian():
             
             for row in range(self.Nlevels):
                 for col in range(row+1):
-                    temp_val = HStark_pi_parity_basis(self.states[row],self.states[col])
+                    temp_val = HStark_pi_parity_basis(self.states[row],self.states[col],self.params)
                     HZ_stark[row,col] = temp_val
                     if row != col:
                         HZ_stark[col,row] = temp_val.conj() ##############################################conjugated!
@@ -151,7 +154,7 @@ class PiHamiltonian():
         H0 = np.zeros((num,num),dtype=np.complex128)
         for row in range(num):
             for col in range(row+1):
-                H0[row,col] = H0_pi_parity_basis(self.states[row],self.states[col])
+                H0[row,col] = H0_pi_parity_basis(self.states[row],self.states[col],self.params)
                 if row != col:
                     H0[col,row] = H0[row,col]
         self.bare = H0  + T00*np.identity(np.shape(H0)[0])
