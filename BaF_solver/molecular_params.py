@@ -18,11 +18,11 @@ class Params:
     gI2 : float
     grot : float
     gl : float
-    A : float
-    AD : float
-    p2q : float
-    Bex : float
-    T00 : float
+    A_cmIn : float
+    AD_cmIn : float
+    p2q_cmIn : float
+    Bex_cmIn : float
+    T00_cmIn : float
     a_ex : float
     b_ex : float
     c_ex : float
@@ -30,7 +30,6 @@ class Params:
     h_Ba_12 : float
     d_Ba : float
     eq0Q1 : float
-    h_F_12 : float
     glp : float
     gLp : float
     de_sigma : float
@@ -39,6 +38,9 @@ class Params:
     @property
     def bFBa(self):
         return self.bBa + self.cBa/3
+    @property
+    def bFF(self):
+        return self.bF + self.cF/3
     @property
     def h_F_12(self):
         return (self.a_ex-1/2*(self.b_ex+self.c_ex))
