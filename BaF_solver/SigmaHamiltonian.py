@@ -46,7 +46,7 @@ class SigmaHamiltonian():
             HZ = np.zeros((self.Nlevels,self.Nlevels))
             for row in range(self.Nlevels):
                 for col in range(row+1):
-                    temp_val = HZeeman_sigma(self.states[row],self.states[col])
+                    temp_val = HZeeman_sigma(self.states[row],self.states[col],params) ############
                     HZ[row,col] = temp_val
                     if row != col:
                         HZ[col,row] = np.conjugate(temp_val) #########################conjugated
@@ -96,7 +96,7 @@ class SigmaHamiltonian():
             HZ_stark = np.zeros((self.Nlevels,self.Nlevels))
             for row in range(self.Nlevels):
                 for col in range(row+1):
-                    temp_val = HStark_sigma(self.states[row],self.states[col])
+                    temp_val = HStark_sigma(self.states[row],self.states[col],params) #########
                     #if np.abs(temp_val)>0:
                     #    print(temp_val)
                     HZ_stark[row,col] = temp_val
@@ -128,7 +128,7 @@ class SigmaHamiltonian():
         H0 = np.zeros((num,num),dtype=np.complex128)
         for row in range(num):
             for col in range(row+1):
-                temp_val = H0_sigma(self.states[row],self.states[col])
+                temp_val = H0_sigma(self.states[row],self.states[col],params) ########
                 H0[row,col] = temp_val
                 if row != col:
                     H0[col,row] = np.conjugate(temp_val) # conjugate necessary here. Possibly not because the static hamiltonian does not have any complex terms.

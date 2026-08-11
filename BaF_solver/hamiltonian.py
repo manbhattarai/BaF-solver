@@ -5,7 +5,8 @@ from .fast_wigners import wigner_6j,wigner_3j,wigner_9j
 from functools import lru_cache
 from .interaction import H_int_omega_optimized
 
-from .molecular_parameters_137 import *
+from .constants import *
+
 
 @lru_cache(maxsize=None)
 def kdel(x,y):
