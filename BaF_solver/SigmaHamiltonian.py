@@ -5,11 +5,12 @@ from .states import SigmaLevel, Superposition
 import time
 
 class SigmaHamiltonian():
-    def __init__(self,states,F_plus,B_field,E_stat_field):
+    def __init__(self,states,F_plus,B_field,E_stat_field,params):
         self.bare = []
-        self.Zeeman = self.Zeeman(states,F_plus,B_field)
-        self.Stark =  self.Stark(states,F_plus,E_stat_field)
+        self.Zeeman = self.Zeeman(states,F_plus,B_field,params)
+        self.Stark =  self.Stark(states,F_plus,E_stat_field,params)
         self.states = states
+        self.params = params
         self.diagonalized_states = []
         self.diagonalized_Hamiltonian = None
         self.diagonalizing_Matrix = None
@@ -19,8 +20,9 @@ class SigmaHamiltonian():
         #self.species = species
     
     class Zeeman():
-        def __init__(self,states,F_plus,B_field):
+        def __init__(self,states,F_plus,B_field,params):
             self.Nlevels = len(states)
+            self.params = params
             self.states = states
             self.B_field = B_field
             self.F_plus,self.F_minus = self.create_ladder_operators(F_plus)
@@ -46,7 +48,7 @@ class SigmaHamiltonian():
             HZ = np.zeros((self.Nlevels,self.Nlevels))
             for row in range(self.Nlevels):
                 for col in range(row+1):
-                    temp_val = HZeeman_sigma(self.states[row],self.states[col],params) ############
+                    temp_val = HZeeman_sigma(self.states[row],self.states[col],self.params) ############
                     HZ[row,col] = temp_val
                     if row != col:
                         HZ[col,row] = np.conjugate(temp_val) #########################conjugated
@@ -70,8 +72,9 @@ class SigmaHamiltonian():
                 self.Y = np.zeros_like(HZ)
 
     class Stark():
-        def __init__(self,states,F_plus,E_stat_field):
+        def __init__(self,states,F_plus,E_stat_field,params):
             self.Nlevels = len(states)
+            self.params = params
             self.states = states
             self.E_stat_field = E_stat_field
             self.F_plus,self.F_minus = self.create_ladder_operators(F_plus)
@@ -96,7 +99,7 @@ class SigmaHamiltonian():
             HZ_stark = np.zeros((self.Nlevels,self.Nlevels))
             for row in range(self.Nlevels):
                 for col in range(row+1):
-                    temp_val = HStark_sigma(self.states[row],self.states[col],params) #########
+                    temp_val = HStark_sigma(self.states[row],self.states[col],self.params) #########
                     #if np.abs(temp_val)>0:
                     #    print(temp_val)
                     HZ_stark[row,col] = temp_val
@@ -128,7 +131,7 @@ class SigmaHamiltonian():
         H0 = np.zeros((num,num),dtype=np.complex128)
         for row in range(num):
             for col in range(row+1):
-                temp_val = H0_sigma(self.states[row],self.states[col],params) ########
+                temp_val = H0_sigma(self.states[row],self.states[col],self.params) ########
                 H0[row,col] = temp_val
                 if row != col:
                     H0[col,row] = np.conjugate(temp_val) # conjugate necessary here. Possibly not because the static hamiltonian does not have any complex terms.
