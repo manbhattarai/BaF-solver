@@ -11,6 +11,7 @@ from .PiHamiltonian import *
 #from numba import jit
 from joblib import Parallel, delayed
 import time
+from .molecular_params import *
 
 class System():
     """ What does the system class contain!"""
@@ -47,15 +48,20 @@ class System():
                         "OMEGA" : OMEGA,
         }
         #Assign I1 based on isotope
+        #Read the params based on isotope
         match isotope:
             case 138:
                 spin_params["I1"] = 0
+                params = params_138
             case 137:
                 spin_params["I1"] = 3/2
+                params = params_137
             case 136:
                 spin_params["I1"] = 0
+                params = params_136
             case 135:
                 spin_params["I1"] = 3/2
+                params = params_135
         #print(I1)
         
         
@@ -65,10 +71,13 @@ class System():
         self.F_plus_pi_all = []
         self.generate_sigma_states(spin_params,ignore_mF = ignore_mF)
         self.generate_pi_states(spin_params,ignore_mF = ignore_mF)
+
         
 
-        self.sigma_Hamiltonian = SigmaHamiltonian(self.sigma_states,self.F_plus_sigma_all,self.B_field,self.E_stat_field)
-        self.pi_Hamiltonian = PiHamiltonian(self.pi_states,self.F_plus_pi_all,self.B_field,self.E_stat_field)
+        
+
+        self.sigma_Hamiltonian = SigmaHamiltonian(self.sigma_states,self.F_plus_sigma_all,self.B_field,self.E_stat_field,params)
+        self.pi_Hamiltonian = PiHamiltonian(self.pi_states,self.F_plus_pi_all,self.B_field,self.E_stat_field,params)
         
         self.interaction_Hamiltonian = None
         self.branching_ratios = None
