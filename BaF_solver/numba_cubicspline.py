@@ -1,5 +1,6 @@
 from numba import njit, complex128, int64, float64
 import numpy as np
+from scipy.interpolate import interp1d,CubicSpline
 
 @njit(int64 (float64[:],float64),cache = True)
 def find_interval(x, xi):
@@ -58,3 +59,19 @@ def make_fast_vector_spline(x: np.ndarray, coefs: np.ndarray):
         return _evaluate_vector_spline(x, coefs, x_eval)
 
     return spline
+
+def numba_interpolate(x,y,real_imag = False):
+    if real_imag == True:
+        cs = CubicSpline(x, np.real(y))#,     kind=interpol_kind, axis=0, bounds_error=False, fill_value='extrapolate')
+        coefs = np.transpose(cs.c, (1, 2, 0))
+        y_interp_real = make_fast_vector_spline(x, coefs)
+
+        cs = CubicSpline(x, np.imag(y))#,     kind=interpol_kind, axis=0, bounds_error=False, fill_value='extrapolate')
+        coefs = np.transpose(cs.c, (1, 2, 0))
+        y_interp_imag = make_fast_vector_spline(x, coefs)
+        y_interp = (y_interp_real,y_interp_imag)
+    else:
+        cs = CubicSpline(x, y)
+        coefs = np.transpose(cs.c, (1, 2, 0))
+        y_interp = make_fast_vector_spline(x, coefs)#,     kind=interpol_kind, axis=0, bounds_error=False, fill_value='extrapolate')
+    return y_interp
