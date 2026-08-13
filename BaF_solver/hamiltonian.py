@@ -596,7 +596,7 @@ def HexR_cor_Brown(state,params):  #corrected follwoing Brown and Carrington
 
 def HexLS_CD(state,params): #checked
     (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state
-    return params.AD/2*Lambda*(Sigma+Sigmap)*HexR_cor_Brown(state)/Bex
+    return params.AD/2*Lambda*(Sigma+Sigmap)*HexR_cor_Brown(state,params)/params.Bex
 
 def Hexpq(state,params):   #checked from Brown and carrington Page 618
     (Lambda,Sigma,Omega,S,J,I1,F1,I2,F,mF,Lambdap,Sigmap,Omegap,S,Jp,I1,F1p,I2,Fp,mFp)=state

@@ -75,3 +75,10 @@ def numba_interpolate(x,y,real_imag = False):
         coefs = np.transpose(cs.c, (1, 2, 0))
         y_interp = make_fast_vector_spline(x, coefs)#,     kind=interpol_kind, axis=0, bounds_error=False, fill_value='extrapolate')
     return y_interp
+
+def get_interp_array(A_interp,shape,t,real_imag = False):
+    if real_imag:
+        real, imag = A_interp
+        return (real(t).reshape(shape),imag(t).reshape(shape))
+    else:
+        return A_interp(t).reshape(shape)

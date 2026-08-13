@@ -193,6 +193,8 @@ class obe:
         self.test_factor=test_factor
         self.mode = mode
 
+        
+
 
         #Read the kwargs
         #The allowed kwargs are
@@ -205,10 +207,15 @@ class obe:
 
 
         B_field = kwargs.get('B_field', (0,0))
+        self.B0 = B_field[0]  
+        self.grad = B_field[1] 
+        
         E_stat_field = kwargs.get('E_stat_field', None)
         Hstatic_int = kwargs.get('Hstatic_int', None)
 
-        
+        self.H0 = H0 # interpolating function. Array of size _n_total x _n_total
+        self._H0_base = 2*np.pi*self.get_interp_array(H0,(self._n_total,self._n_total),self.B0,real_imag = False)
+        self._H0_base_diag = np.diag(self._H0_base)
 
 
         if isinstance(E_stat_field,Static_Excitation):
@@ -221,30 +228,12 @@ class obe:
         else:
             self.H_static_multiplier = [lambda var: 0,lambda var: 0]
 
-        self.B0 = B_field[0]  
-        self.grad = B_field[1]  
-        
-        
-        
-        
+         
 
         
-        
-        
-
-
-        self.H0 = H0 # interpolating function. Array of size _n_total x _n_total
-        self.Hstatic_int = Hstatic_int
-
-        self._H0_base = 2*np.pi*self.get_interp_array(H0,(self._n_total,self._n_total),self.B0,real_imag = False)
-        self._H0_base_diag = np.diag(self._H0_base)
 
         self.Hinit_scipy = 0
         self.Hinit_symengine = 0
-        
-
-
-        
 
         self.scipy_symengine_multiplication = 0
         self.commutator_time_mult = 0

@@ -46,49 +46,49 @@ class Params:
         return (self.a_ex-1/2*(self.b_ex+self.c_ex))
     @property
     def A(self):
-        return self.A_cmIN*cmIn2MHz
+        return self.A_cmIn*cmIn2MHz
     @property
     def AD(self):
-        return self.AD_cmIN*cmIn2MHz
+        return self.AD_cmIn*cmIn2MHz
     @property
     def p2q(self):
-        return self.p2q_cmIN*cmIn2MHz
+        return self.p2q_cmIn*cmIn2MHz
     @property
     def Bex(self):
-        return self.Bex_cmIN*cmIn2MHz  
+        return self.Bex_cmIn*cmIn2MHz  
     @property
     def T00(self):
-        return self.T00_cmIN*cmIn2MHz  
+        return self.T00_cmIn*cmIn2MHz  
     
 
 params_138 = Params(
-    BN=6479.67249,
-    DN=5.53483e-3,
-    gamma=80.9605,
-    delta_gamma=0,
-    bBa=2303.4,
-    cBa=75.1965,
-    eq0Q=-143.6812,
-    bF=63.41446,
-    cF=7.30504,
+    BN=6473.9586325,
+    DN=0.005529715,
+    gamma=80.9548,
+    delta_gamma=0.000112,
+    bBa=0.0,
+    cBa=0.0,
+    eq0Q=0.0,
+    bF=63.509,
+    cF=8.224,
     cI=0,
-    gS=2.002,
+    gS=2.00197,
     gI1=0.937365 / 1.5,
     gI2=5.258,
     grot=-0.048,
-    gl=-0.028,
-    A_cmIn=632.28165,
-    AD_cmIn=0.0310 * 1e-3,
-    p2q_cmIn=-0.2578,
-    Bex_cmIn=0.21189575,
-    T00_cmIn=11946.316291675,
+    gl=-0.00594,
+    A_cmIn=632.28175,
+    AD_cmIn=0.0 * 1e-3,
+    p2q_cmIn=-0.25755,
+    Bex_cmIn=0.2117414,
+    T00_cmIn=11946.3168,
     a_ex=26.55,
     b_ex=-0.2303,
     c_ex=-5.3094,
     d_F=3.58,
-    h_Ba_12=206.7,
-    d_Ba=254.3,
-    eq0Q1=-89.1,
+    h_Ba_12=0.0,
+    d_Ba=0.0,
+    eq0Q1=0.0,
     glp=-0.536,
     gLp=0.98,
     de_sigma=3.179 * uE / 2.78,

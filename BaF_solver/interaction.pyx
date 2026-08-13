@@ -1,20 +1,6 @@
 from .states import SigmaLevel,PiLevelOmega
-
-
-
 from .fast_wigners import wigner_6j,wigner_3j,wigner_9j
 
-
-"""
-import ctypes
-libm = ctypes.CDLL('libm.dylib')
-
-libm.sqrt.argtypes = [ctypes.c_double]
-libm.sqrt.restype = ctypes.c_double
-
-libm.fabs.argtypes = [ctypes.c_double]
-libm.fabs.restype = ctypes.c_double
-"""
 
 cdef extern from "math.h" nogil:
     double sqrt(double)
@@ -35,13 +21,11 @@ cdef inline double minus_1_pow(double x) nogil:
 
 
 #### Dipole matrix element between Sigma and Pi states #######################
-
-
 cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, double pol=0.0):    #pol convention changed. pol defined from ground (state1) to excited (state2).
                                                                     # pol +1 -> mF_state2 - mF_state1 = +1
     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
 
-    S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.I2,state1.G,state1.N,state1.F1,state1.F,state1.mF
+    S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF
     Lambda,Sigma,Omega,Jex,F1p,Fp,mFp = state2.Lambda, \
                                         state2.Sigma, \
                                         state2.Omega, \
@@ -65,7 +49,6 @@ cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, doubl
                     )
 
     for iter_idx in range(<int>(2*fabs(N-S_)),<int>(2*(N+S_+1)),2):
-        #J = 0.5*float(iter_idx)
         J = 0.5*<double>iter_idx
         mult_J = (nreduced(J,G)*
                     wigner_6j(F1,G,N,S_,J,I1_)*
@@ -82,7 +65,7 @@ cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, doubl
                         )
             for q in range(-1,2,2):#[-1,1]: # removed q= 0 value because Lambda (from Pi state) cannot be 0.
                 val += mult_sigma*wigner_3j(J,1,Jex,-omega,q,Omega)*kdel(Lambda,-q)
-        #iter_idx += 2
+        
     return val*pre_factor
 
 ####################################################################################################

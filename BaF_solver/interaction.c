@@ -1501,9 +1501,9 @@ static const char *__pyx_f[] = {
 /*--- Type declarations ---*/
 struct __pyx_opt_args_10BaF_solver_11interaction_H_int_omega_optimized;
 
-/* "BaF_solver/interaction.pyx":40
+/* "BaF_solver/interaction.pyx":24
  * 
- * 
+ * #### Dipole matrix element between Sigma and Pi states #######################
  * cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, double pol=0.0):    #pol convention changed. pol defined from ground (state1) to excited (state2).             # <<<<<<<<<<<<<<
  *                                                                     # pol +1 -> mF_state2 - mF_state1 = +1
  *     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
@@ -2415,7 +2415,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_codeobj__3 __pyx_mstate_global->__pyx_codeobj__3
 /* #### Code section: module_code ### */
 
-/* "BaF_solver/interaction.pyx":23
+/* "BaF_solver/interaction.pyx":9
  *     double fabs(double)
  * 
  * cdef inline double kdel(double x,double y) nogil:             # <<<<<<<<<<<<<<
@@ -2428,7 +2428,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_kdel(double __pyx
   double __pyx_t_1;
   int __pyx_t_2;
 
-  /* "BaF_solver/interaction.pyx":24
+  /* "BaF_solver/interaction.pyx":10
  * 
  * cdef inline double kdel(double x,double y) nogil:
  *     return 1.0 if <int>(2*x) == <int>(2*y) else 0.0             # <<<<<<<<<<<<<<
@@ -2444,7 +2444,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_kdel(double __pyx
   __pyx_r = __pyx_t_1;
   goto __pyx_L0;
 
-  /* "BaF_solver/interaction.pyx":23
+  /* "BaF_solver/interaction.pyx":9
  *     double fabs(double)
  * 
  * cdef inline double kdel(double x,double y) nogil:             # <<<<<<<<<<<<<<
@@ -2457,7 +2457,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_kdel(double __pyx
   return __pyx_r;
 }
 
-/* "BaF_solver/interaction.pyx":26
+/* "BaF_solver/interaction.pyx":12
  *     return 1.0 if <int>(2*x) == <int>(2*y) else 0.0
  * 
  * cdef inline double reduced(double x) nogil:             # <<<<<<<<<<<<<<
@@ -2468,7 +2468,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_kdel(double __pyx
 static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_reduced(double __pyx_v_x) {
   double __pyx_r;
 
-  /* "BaF_solver/interaction.pyx":27
+  /* "BaF_solver/interaction.pyx":13
  * 
  * cdef inline double reduced(double x) nogil:
  *     return sqrt(x*(x+1.0)*(2.0*x+1.0))             # <<<<<<<<<<<<<<
@@ -2478,7 +2478,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_reduced(double __
   __pyx_r = sqrt(((__pyx_v_x * (__pyx_v_x + 1.0)) * ((2.0 * __pyx_v_x) + 1.0)));
   goto __pyx_L0;
 
-  /* "BaF_solver/interaction.pyx":26
+  /* "BaF_solver/interaction.pyx":12
  *     return 1.0 if <int>(2*x) == <int>(2*y) else 0.0
  * 
  * cdef inline double reduced(double x) nogil:             # <<<<<<<<<<<<<<
@@ -2491,7 +2491,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_reduced(double __
   return __pyx_r;
 }
 
-/* "BaF_solver/interaction.pyx":29
+/* "BaF_solver/interaction.pyx":15
  *     return sqrt(x*(x+1.0)*(2.0*x+1.0))
  * 
  * cdef inline double nreduced(double x,double y) nogil:             # <<<<<<<<<<<<<<
@@ -2502,7 +2502,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_reduced(double __
 static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_nreduced(double __pyx_v_x, double __pyx_v_y) {
   double __pyx_r;
 
-  /* "BaF_solver/interaction.pyx":30
+  /* "BaF_solver/interaction.pyx":16
  * 
  * cdef inline double nreduced(double x,double y) nogil:
  *     return sqrt((2.0*x+1.0)*(2.0*y+1.0))             # <<<<<<<<<<<<<<
@@ -2512,7 +2512,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_nreduced(double _
   __pyx_r = sqrt((((2.0 * __pyx_v_x) + 1.0) * ((2.0 * __pyx_v_y) + 1.0)));
   goto __pyx_L0;
 
-  /* "BaF_solver/interaction.pyx":29
+  /* "BaF_solver/interaction.pyx":15
  *     return sqrt(x*(x+1.0)*(2.0*x+1.0))
  * 
  * cdef inline double nreduced(double x,double y) nogil:             # <<<<<<<<<<<<<<
@@ -2525,7 +2525,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_nreduced(double _
   return __pyx_r;
 }
 
-/* "BaF_solver/interaction.pyx":32
+/* "BaF_solver/interaction.pyx":18
  *     return sqrt((2.0*x+1.0)*(2.0*y+1.0))
  * 
  * cdef inline double minus_1_pow(double x) nogil:             # <<<<<<<<<<<<<<
@@ -2539,7 +2539,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_minus_1_pow(doubl
   double __pyx_t_1;
   int __pyx_t_2;
 
-  /* "BaF_solver/interaction.pyx":33
+  /* "BaF_solver/interaction.pyx":19
  * 
  * cdef inline double minus_1_pow(double x) nogil:
  *     cdef int temp = <int>x             # <<<<<<<<<<<<<<
@@ -2548,7 +2548,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_minus_1_pow(doubl
  */
   __pyx_v_temp = ((int)__pyx_v_x);
 
-  /* "BaF_solver/interaction.pyx":34
+  /* "BaF_solver/interaction.pyx":20
  * cdef inline double minus_1_pow(double x) nogil:
  *     cdef int temp = <int>x
  *     return 1.0 if temp%2 == 0 else -1.0             # <<<<<<<<<<<<<<
@@ -2564,7 +2564,7 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_minus_1_pow(doubl
   __pyx_r = __pyx_t_1;
   goto __pyx_L0;
 
-  /* "BaF_solver/interaction.pyx":32
+  /* "BaF_solver/interaction.pyx":18
  *     return sqrt((2.0*x+1.0)*(2.0*y+1.0))
  * 
  * cdef inline double minus_1_pow(double x) nogil:             # <<<<<<<<<<<<<<
@@ -2577,9 +2577,9 @@ static CYTHON_INLINE double __pyx_f_10BaF_solver_11interaction_minus_1_pow(doubl
   return __pyx_r;
 }
 
-/* "BaF_solver/interaction.pyx":40
+/* "BaF_solver/interaction.pyx":24
  * 
- * 
+ * #### Dipole matrix element between Sigma and Pi states #######################
  * cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, double pol=0.0):    #pol convention changed. pol defined from ground (state1) to excited (state2).             # <<<<<<<<<<<<<<
  *                                                                     # pol +1 -> mF_state2 - mF_state1 = +1
  *     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
@@ -2655,44 +2655,44 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
     }
   }
 
-  /* "BaF_solver/interaction.pyx":44
+  /* "BaF_solver/interaction.pyx":28
  *     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
  * 
- *     S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.I2,state1.G,state1.N,state1.F1,state1.F,state1.mF             # <<<<<<<<<<<<<<
+ *     S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF             # <<<<<<<<<<<<<<
  *     Lambda,Sigma,Omega,Jex,F1p,Fp,mFp = state2.Lambda, \
  *                                         state2.Sigma, \
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_S); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_S); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_I1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_I1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_I2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_G); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_G); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_N); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_N); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_F1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_F1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_I2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_F); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_F); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_mF); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state1, __pyx_n_s_mF); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_S_ = __pyx_t_2;
   __pyx_v_I1_ = __pyx_t_3;
@@ -2703,100 +2703,100 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
   __pyx_v_F = __pyx_t_8;
   __pyx_v_mF = __pyx_t_9;
 
-  /* "BaF_solver/interaction.pyx":45
+  /* "BaF_solver/interaction.pyx":29
  * 
- *     S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.I2,state1.G,state1.N,state1.F1,state1.F,state1.mF
+ *     S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF
  *     Lambda,Sigma,Omega,Jex,F1p,Fp,mFp = state2.Lambda, \             # <<<<<<<<<<<<<<
  *                                         state2.Sigma, \
  *                                         state2.Omega, \
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_Lambda); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_Lambda); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "BaF_solver/interaction.pyx":46
- *     S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.I2,state1.G,state1.N,state1.F1,state1.F,state1.mF
+  /* "BaF_solver/interaction.pyx":30
+ *     S_,I1_,G,N,F1,I2_,F,mF=state1.S,state1.I1,state1.G,state1.N,state1.F1,state1.I2,state1.F,state1.mF
  *     Lambda,Sigma,Omega,Jex,F1p,Fp,mFp = state2.Lambda, \
  *                                         state2.Sigma, \             # <<<<<<<<<<<<<<
  *                                         state2.Omega, \
  *                                         state2.parity_state.J, \
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_Sigma); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_Sigma); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "BaF_solver/interaction.pyx":47
+  /* "BaF_solver/interaction.pyx":31
  *     Lambda,Sigma,Omega,Jex,F1p,Fp,mFp = state2.Lambda, \
  *                                         state2.Sigma, \
  *                                         state2.Omega, \             # <<<<<<<<<<<<<<
  *                                         state2.parity_state.J, \
  *                                         state2.parity_state.F1, \
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_Omega); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_Omega); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "BaF_solver/interaction.pyx":48
+  /* "BaF_solver/interaction.pyx":32
  *                                         state2.Sigma, \
  *                                         state2.Omega, \
  *                                         state2.parity_state.J, \             # <<<<<<<<<<<<<<
  *                                         state2.parity_state.F1, \
  *                                         state2.parity_state.F, \
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_J); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_J); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_10); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_10); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "BaF_solver/interaction.pyx":49
+  /* "BaF_solver/interaction.pyx":33
  *                                         state2.Omega, \
  *                                         state2.parity_state.J, \
  *                                         state2.parity_state.F1, \             # <<<<<<<<<<<<<<
  *                                         state2.parity_state.F, \
  *                                         state2.parity_state.mF
  */
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_F1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_F1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "BaF_solver/interaction.pyx":50
+  /* "BaF_solver/interaction.pyx":34
  *                                         state2.parity_state.J, \
  *                                         state2.parity_state.F1, \
  *                                         state2.parity_state.F, \             # <<<<<<<<<<<<<<
  *                                         state2.parity_state.mF
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_F); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_F); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_10); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_10); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "BaF_solver/interaction.pyx":51
+  /* "BaF_solver/interaction.pyx":35
  *                                         state2.parity_state.F1, \
  *                                         state2.parity_state.F, \
  *                                         state2.parity_state.mF             # <<<<<<<<<<<<<<
  * 
  *     cdef int i
  */
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_state2, __pyx_n_s_parity_state); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_mF); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_mF); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_Lambda = __pyx_t_9;
   __pyx_v_Sigma = __pyx_t_8;
@@ -2806,7 +2806,7 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
   __pyx_v_Fp = __pyx_t_4;
   __pyx_v_mFp = __pyx_t_3;
 
-  /* "BaF_solver/interaction.pyx":56
+  /* "BaF_solver/interaction.pyx":40
  *     cdef double J,sigma,omega
  *     cdef int q,iter_idx
  *     cdef double val = 0.0             # <<<<<<<<<<<<<<
@@ -2815,43 +2815,43 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
  */
   __pyx_v_val = 0.0;
 
-  /* "BaF_solver/interaction.pyx":59
+  /* "BaF_solver/interaction.pyx":43
  *     cdef double mult_J,mult_sigma,pre_factor
  * 
  *     pre_factor = (minus_1_pow(G+S_+I1_+F-mF+Fp+I2_+F1+1)*             # <<<<<<<<<<<<<<
  *                     sqrt(2*N+1)*
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  */
-  __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_minus_1_pow(((((((((__pyx_v_G + __pyx_v_S_) + __pyx_v_I1_) + __pyx_v_F) - __pyx_v_mF) + __pyx_v_Fp) + __pyx_v_I2_) + __pyx_v_F1) + 1.0)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_minus_1_pow(((((((((__pyx_v_G + __pyx_v_S_) + __pyx_v_I1_) + __pyx_v_F) - __pyx_v_mF) + __pyx_v_Fp) + __pyx_v_I2_) + __pyx_v_F1) + 1.0)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 43, __pyx_L1_error)
 
-  /* "BaF_solver/interaction.pyx":60
+  /* "BaF_solver/interaction.pyx":44
  * 
  *     pre_factor = (minus_1_pow(G+S_+I1_+F-mF+Fp+I2_+F1+1)*
  *                     sqrt(2*N+1)*             # <<<<<<<<<<<<<<
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  *                     nreduced(F,Fp)*
  */
-  __pyx_t_1 = PyFloat_FromDouble((__pyx_t_3 * sqrt(((2.0 * __pyx_v_N) + 1.0)))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble((__pyx_t_3 * sqrt(((2.0 * __pyx_v_N) + 1.0)))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "BaF_solver/interaction.pyx":61
+  /* "BaF_solver/interaction.pyx":45
  *     pre_factor = (minus_1_pow(G+S_+I1_+F-mF+Fp+I2_+F1+1)*
  *                     sqrt(2*N+1)*
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*             # <<<<<<<<<<<<<<
  *                     nreduced(F,Fp)*
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  __pyx_t_12 = PyFloat_FromDouble(__pyx_v_F); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_12 = PyFloat_FromDouble(__pyx_v_F); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
-  __pyx_t_13 = PyFloat_FromDouble(__pyx_v_Fp); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_13 = PyFloat_FromDouble(__pyx_v_Fp); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
-  __pyx_t_14 = PyFloat_FromDouble((-__pyx_v_mF)); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_14 = PyFloat_FromDouble((-__pyx_v_mF)); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_14);
-  __pyx_t_15 = PyFloat_FromDouble((-__pyx_v_pol)); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_15 = PyFloat_FromDouble((-__pyx_v_pol)); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_16 = PyFloat_FromDouble(__pyx_v_mFp); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_16 = PyFloat_FromDouble(__pyx_v_mFp); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
   __pyx_t_17 = NULL;
   __pyx_t_18 = 0;
@@ -2876,64 +2876,64 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 61, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 45, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   }
 
-  /* "BaF_solver/interaction.pyx":60
+  /* "BaF_solver/interaction.pyx":44
  * 
  *     pre_factor = (minus_1_pow(G+S_+I1_+F-mF+Fp+I2_+F1+1)*
  *                     sqrt(2*N+1)*             # <<<<<<<<<<<<<<
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  *                     nreduced(F,Fp)*
  */
-  __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "BaF_solver/interaction.pyx":62
+  /* "BaF_solver/interaction.pyx":46
  *                     sqrt(2*N+1)*
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  *                     nreduced(F,Fp)*             # <<<<<<<<<<<<<<
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*
  *                     nreduced(F1,F1p)
  */
-  __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_F, __pyx_v_Fp); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 62, __pyx_L1_error)
-  __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_F, __pyx_v_Fp); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
 
-  /* "BaF_solver/interaction.pyx":61
+  /* "BaF_solver/interaction.pyx":45
  *     pre_factor = (minus_1_pow(G+S_+I1_+F-mF+Fp+I2_+F1+1)*
  *                     sqrt(2*N+1)*
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*             # <<<<<<<<<<<<<<
  *                     nreduced(F,Fp)*
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*
  */
-  __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "BaF_solver/interaction.pyx":63
+  /* "BaF_solver/interaction.pyx":47
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  *                     nreduced(F,Fp)*
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*             # <<<<<<<<<<<<<<
  *                     nreduced(F1,F1p)
  *                     )
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  __pyx_t_16 = PyFloat_FromDouble(__pyx_v_F1p); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_16 = PyFloat_FromDouble(__pyx_v_F1p); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_15 = PyFloat_FromDouble(__pyx_v_Fp); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_15 = PyFloat_FromDouble(__pyx_v_Fp); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_14 = PyFloat_FromDouble(__pyx_v_I2_); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_14 = PyFloat_FromDouble(__pyx_v_I2_); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_14);
-  __pyx_t_13 = PyFloat_FromDouble(__pyx_v_F); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_13 = PyFloat_FromDouble(__pyx_v_F); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
-  __pyx_t_12 = PyFloat_FromDouble(__pyx_v_F1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_12 = PyFloat_FromDouble(__pyx_v_F1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
   __pyx_t_17 = NULL;
   __pyx_t_18 = 0;
@@ -2958,101 +2958,101 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
     __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 63, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   }
 
-  /* "BaF_solver/interaction.pyx":62
+  /* "BaF_solver/interaction.pyx":46
  *                     sqrt(2*N+1)*
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  *                     nreduced(F,Fp)*             # <<<<<<<<<<<<<<
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*
  *                     nreduced(F1,F1p)
  */
-  __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "BaF_solver/interaction.pyx":64
+  /* "BaF_solver/interaction.pyx":48
  *                     nreduced(F,Fp)*
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*
  *                     nreduced(F1,F1p)             # <<<<<<<<<<<<<<
  *                     )
  * 
  */
-  __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_F1, __pyx_v_F1p); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
-  __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_F1, __pyx_v_F1p); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
 
-  /* "BaF_solver/interaction.pyx":63
+  /* "BaF_solver/interaction.pyx":47
  *                     wigner_3j(F,1,Fp,-mF,-pol,mFp)*
  *                     nreduced(F,Fp)*
  *                     wigner_6j(F1p,Fp,I2_,F,F1,1)*             # <<<<<<<<<<<<<<
  *                     nreduced(F1,F1p)
  *                     )
  */
-  __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_pre_factor = __pyx_t_3;
 
-  /* "BaF_solver/interaction.pyx":67
+  /* "BaF_solver/interaction.pyx":51
  *                     )
  * 
  *     for iter_idx in range(<int>(2*fabs(N-S_)),<int>(2*(N+S_+1)),2):             # <<<<<<<<<<<<<<
- *         #J = 0.5*float(iter_idx)
  *         J = 0.5*<double>iter_idx
+ *         mult_J = (nreduced(J,G)*
  */
   __pyx_t_19 = ((int)(2.0 * ((__pyx_v_N + __pyx_v_S_) + 1.0)));
   __pyx_t_20 = __pyx_t_19;
   for (__pyx_t_21 = ((int)(2.0 * fabs((__pyx_v_N - __pyx_v_S_)))); __pyx_t_21 < __pyx_t_20; __pyx_t_21+=2) {
     __pyx_v_iter_idx = __pyx_t_21;
 
-    /* "BaF_solver/interaction.pyx":69
+    /* "BaF_solver/interaction.pyx":52
+ * 
  *     for iter_idx in range(<int>(2*fabs(N-S_)),<int>(2*(N+S_+1)),2):
- *         #J = 0.5*float(iter_idx)
  *         J = 0.5*<double>iter_idx             # <<<<<<<<<<<<<<
  *         mult_J = (nreduced(J,G)*
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  */
     __pyx_v_J = (0.5 * ((double)__pyx_v_iter_idx));
 
-    /* "BaF_solver/interaction.pyx":70
- *         #J = 0.5*float(iter_idx)
+    /* "BaF_solver/interaction.pyx":53
+ *     for iter_idx in range(<int>(2*fabs(N-S_)),<int>(2*(N+S_+1)),2):
  *         J = 0.5*<double>iter_idx
  *         mult_J = (nreduced(J,G)*             # <<<<<<<<<<<<<<
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  *                     minus_1_pow(F1p+I1_+J+1)*
  */
-    __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_J, __pyx_v_G); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 70, __pyx_L1_error)
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_J, __pyx_v_G); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
 
-    /* "BaF_solver/interaction.pyx":71
+    /* "BaF_solver/interaction.pyx":54
  *         J = 0.5*<double>iter_idx
  *         mult_J = (nreduced(J,G)*
  *                     wigner_6j(F1,G,N,S_,J,I1_)*             # <<<<<<<<<<<<<<
  *                     minus_1_pow(F1p+I1_+J+1)*
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_12 = PyFloat_FromDouble(__pyx_v_F1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_12 = PyFloat_FromDouble(__pyx_v_F1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_13 = PyFloat_FromDouble(__pyx_v_G); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_13 = PyFloat_FromDouble(__pyx_v_G); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_14 = PyFloat_FromDouble(__pyx_v_N); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_14 = PyFloat_FromDouble(__pyx_v_N); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_15 = PyFloat_FromDouble(__pyx_v_S_); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_15 = PyFloat_FromDouble(__pyx_v_S_); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
-    __pyx_t_16 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_16 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_17 = PyFloat_FromDouble(__pyx_v_I1_); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_17 = PyFloat_FromDouble(__pyx_v_I1_); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
     __pyx_t_22 = NULL;
     __pyx_t_18 = 0;
@@ -3078,64 +3078,64 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 71, __pyx_L1_error)
+      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 54, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
 
-    /* "BaF_solver/interaction.pyx":70
- *         #J = 0.5*float(iter_idx)
+    /* "BaF_solver/interaction.pyx":53
+ *     for iter_idx in range(<int>(2*fabs(N-S_)),<int>(2*(N+S_+1)),2):
  *         J = 0.5*<double>iter_idx
  *         mult_J = (nreduced(J,G)*             # <<<<<<<<<<<<<<
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  *                     minus_1_pow(F1p+I1_+J+1)*
  */
-    __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "BaF_solver/interaction.pyx":72
+    /* "BaF_solver/interaction.pyx":55
  *         mult_J = (nreduced(J,G)*
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  *                     minus_1_pow(F1p+I1_+J+1)*             # <<<<<<<<<<<<<<
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*
  *                     nreduced(J,Jex)
  */
-    __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_minus_1_pow((((__pyx_v_F1p + __pyx_v_I1_) + __pyx_v_J) + 1.0)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 72, __pyx_L1_error)
-    __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_minus_1_pow((((__pyx_v_F1p + __pyx_v_I1_) + __pyx_v_J) + 1.0)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
 
-    /* "BaF_solver/interaction.pyx":71
+    /* "BaF_solver/interaction.pyx":54
  *         J = 0.5*<double>iter_idx
  *         mult_J = (nreduced(J,G)*
  *                     wigner_6j(F1,G,N,S_,J,I1_)*             # <<<<<<<<<<<<<<
  *                     minus_1_pow(F1p+I1_+J+1)*
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*
  */
-    __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "BaF_solver/interaction.pyx":73
+    /* "BaF_solver/interaction.pyx":56
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  *                     minus_1_pow(F1p+I1_+J+1)*
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*             # <<<<<<<<<<<<<<
  *                     nreduced(J,Jex)
  *                 )
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_17 = PyFloat_FromDouble(__pyx_v_Jex); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_17 = PyFloat_FromDouble(__pyx_v_Jex); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
-    __pyx_t_16 = PyFloat_FromDouble(__pyx_v_F1p); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_16 = PyFloat_FromDouble(__pyx_v_F1p); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_15 = PyFloat_FromDouble(__pyx_v_I1_); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_15 = PyFloat_FromDouble(__pyx_v_I1_); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
-    __pyx_t_14 = PyFloat_FromDouble(__pyx_v_F1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_14 = PyFloat_FromDouble(__pyx_v_F1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_13 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_13 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
     __pyx_t_12 = NULL;
     __pyx_t_18 = 0;
@@ -3160,66 +3160,66 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 73, __pyx_L1_error)
+      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
 
-    /* "BaF_solver/interaction.pyx":72
+    /* "BaF_solver/interaction.pyx":55
  *         mult_J = (nreduced(J,G)*
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  *                     minus_1_pow(F1p+I1_+J+1)*             # <<<<<<<<<<<<<<
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*
  *                     nreduced(J,Jex)
  */
-    __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_11 = PyNumber_Multiply(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "BaF_solver/interaction.pyx":74
+    /* "BaF_solver/interaction.pyx":57
  *                     minus_1_pow(F1p+I1_+J+1)*
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*
  *                     nreduced(J,Jex)             # <<<<<<<<<<<<<<
  *                 )
  * 
  */
-    __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_J, __pyx_v_Jex); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L1_error)
-    __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 74, __pyx_L1_error)
+    __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_nreduced(__pyx_v_J, __pyx_v_Jex); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 57, __pyx_L1_error)
+    __pyx_t_10 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 57, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
 
-    /* "BaF_solver/interaction.pyx":73
+    /* "BaF_solver/interaction.pyx":56
  *                     wigner_6j(F1,G,N,S_,J,I1_)*
  *                     minus_1_pow(F1p+I1_+J+1)*
  *                     wigner_6j(Jex,F1p,I1_,F1,J,1)*             # <<<<<<<<<<<<<<
  *                     nreduced(J,Jex)
  *                 )
  */
-    __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_mult_J = __pyx_t_3;
 
-    /* "BaF_solver/interaction.pyx":77
+    /* "BaF_solver/interaction.pyx":60
  *                 )
  * 
  *         for sigma in [-1.0/2,1.0/2]:             # <<<<<<<<<<<<<<
  *             omega = sigma
  *             mult_sigma = (mult_J*
  */
-    __pyx_t_1 = PyFloat_FromDouble((-1.0 / 2.0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((-1.0 / 2.0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 60, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_10 = PyFloat_FromDouble((1.0 / 2.0)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_10 = PyFloat_FromDouble((1.0 / 2.0)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 60, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 60, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_GIVEREF(__pyx_t_1);
-    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error);
+    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_1)) __PYX_ERR(0, 60, __pyx_L1_error);
     __Pyx_GIVEREF(__pyx_t_10);
-    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_10)) __PYX_ERR(0, 77, __pyx_L1_error);
+    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_10)) __PYX_ERR(0, 60, __pyx_L1_error);
     __pyx_t_1 = 0;
     __pyx_t_10 = 0;
     __pyx_t_10 = __pyx_t_11; __Pyx_INCREF(__pyx_t_10);
@@ -3228,16 +3228,16 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
     for (;;) {
       if (__pyx_t_23 >= 2) break;
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-      __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_10, __pyx_t_23); __Pyx_INCREF(__pyx_t_11); __pyx_t_23++; if (unlikely((0 < 0))) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_10, __pyx_t_23); __Pyx_INCREF(__pyx_t_11); __pyx_t_23++; if (unlikely((0 < 0))) __PYX_ERR(0, 60, __pyx_L1_error)
       #else
-      __pyx_t_11 = __Pyx_PySequence_ITEM(__pyx_t_10, __pyx_t_23); __pyx_t_23++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PySequence_ITEM(__pyx_t_10, __pyx_t_23); __pyx_t_23++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 60, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       #endif
-      __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 60, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_v_sigma = __pyx_t_3;
 
-      /* "BaF_solver/interaction.pyx":78
+      /* "BaF_solver/interaction.pyx":61
  * 
  *         for sigma in [-1.0/2,1.0/2]:
  *             omega = sigma             # <<<<<<<<<<<<<<
@@ -3246,43 +3246,43 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
  */
       __pyx_v_omega = __pyx_v_sigma;
 
-      /* "BaF_solver/interaction.pyx":80
+      /* "BaF_solver/interaction.pyx":63
  *             omega = sigma
  *             mult_sigma = (mult_J*
  *                             minus_1_pow(N-S_+omega+J-omega)*wigner_3j(J,S_,N,omega,-sigma,0)*             # <<<<<<<<<<<<<<
  *                             kdel(sigma,Sigma)
  *                         )
  */
-      __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_minus_1_pow(((((__pyx_v_N - __pyx_v_S_) + __pyx_v_omega) + __pyx_v_J) - __pyx_v_omega)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_minus_1_pow(((((__pyx_v_N - __pyx_v_S_) + __pyx_v_omega) + __pyx_v_J) - __pyx_v_omega)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L1_error)
 
-      /* "BaF_solver/interaction.pyx":79
+      /* "BaF_solver/interaction.pyx":62
  *         for sigma in [-1.0/2,1.0/2]:
  *             omega = sigma
  *             mult_sigma = (mult_J*             # <<<<<<<<<<<<<<
  *                             minus_1_pow(N-S_+omega+J-omega)*wigner_3j(J,S_,N,omega,-sigma,0)*
  *                             kdel(sigma,Sigma)
  */
-      __pyx_t_11 = PyFloat_FromDouble((__pyx_v_mult_J * __pyx_t_3)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble((__pyx_v_mult_J * __pyx_t_3)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
 
-      /* "BaF_solver/interaction.pyx":80
+      /* "BaF_solver/interaction.pyx":63
  *             omega = sigma
  *             mult_sigma = (mult_J*
  *                             minus_1_pow(N-S_+omega+J-omega)*wigner_3j(J,S_,N,omega,-sigma,0)*             # <<<<<<<<<<<<<<
  *                             kdel(sigma,Sigma)
  *                         )
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
-      __pyx_t_14 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_14 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_15 = PyFloat_FromDouble(__pyx_v_S_); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_15 = PyFloat_FromDouble(__pyx_v_S_); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_16 = PyFloat_FromDouble(__pyx_v_N); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_16 = PyFloat_FromDouble(__pyx_v_N); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __pyx_t_17 = PyFloat_FromDouble(__pyx_v_omega); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_17 = PyFloat_FromDouble(__pyx_v_omega); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
-      __pyx_t_12 = PyFloat_FromDouble((-__pyx_v_sigma)); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_12 = PyFloat_FromDouble((-__pyx_v_sigma)); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __pyx_t_22 = NULL;
       __pyx_t_18 = 0;
@@ -3307,73 +3307,73 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 80, __pyx_L1_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
-      __pyx_t_13 = PyNumber_Multiply(__pyx_t_11, __pyx_t_1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_13 = PyNumber_Multiply(__pyx_t_11, __pyx_t_1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "BaF_solver/interaction.pyx":81
+      /* "BaF_solver/interaction.pyx":64
  *             mult_sigma = (mult_J*
  *                             minus_1_pow(N-S_+omega+J-omega)*wigner_3j(J,S_,N,omega,-sigma,0)*
  *                             kdel(sigma,Sigma)             # <<<<<<<<<<<<<<
  *                         )
  *             for q in range(-1,2,2):#[-1,1]: # removed q= 0 value because Lambda (from Pi state) cannot be 0.
  */
-      __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_kdel(__pyx_v_sigma, __pyx_v_Sigma); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 81, __pyx_L1_error)
-      __pyx_t_1 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L1_error)
+      __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_kdel(__pyx_v_sigma, __pyx_v_Sigma); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
 
-      /* "BaF_solver/interaction.pyx":80
+      /* "BaF_solver/interaction.pyx":63
  *             omega = sigma
  *             mult_sigma = (mult_J*
  *                             minus_1_pow(N-S_+omega+J-omega)*wigner_3j(J,S_,N,omega,-sigma,0)*             # <<<<<<<<<<<<<<
  *                             kdel(sigma,Sigma)
  *                         )
  */
-      __pyx_t_11 = PyNumber_Multiply(__pyx_t_13, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_11 = PyNumber_Multiply(__pyx_t_13, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_v_mult_sigma = __pyx_t_3;
 
-      /* "BaF_solver/interaction.pyx":83
+      /* "BaF_solver/interaction.pyx":66
  *                             kdel(sigma,Sigma)
  *                         )
  *             for q in range(-1,2,2):#[-1,1]: # removed q= 0 value because Lambda (from Pi state) cannot be 0.             # <<<<<<<<<<<<<<
  *                 val += mult_sigma*wigner_3j(J,1,Jex,-omega,q,Omega)*kdel(Lambda,-q)
- *         #iter_idx += 2
+ * 
  */
       for (__pyx_t_24 = -1; __pyx_t_24 < 2; __pyx_t_24+=2) {
         __pyx_v_q = __pyx_t_24;
 
-        /* "BaF_solver/interaction.pyx":84
+        /* "BaF_solver/interaction.pyx":67
  *                         )
  *             for q in range(-1,2,2):#[-1,1]: # removed q= 0 value because Lambda (from Pi state) cannot be 0.
  *                 val += mult_sigma*wigner_3j(J,1,Jex,-omega,q,Omega)*kdel(Lambda,-q)             # <<<<<<<<<<<<<<
- *         #iter_idx += 2
+ * 
  *     return val*pre_factor
  */
-        __pyx_t_11 = PyFloat_FromDouble(__pyx_v_val); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_11 = PyFloat_FromDouble(__pyx_v_val); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_11);
-        __pyx_t_1 = PyFloat_FromDouble(__pyx_v_mult_sigma); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_1 = PyFloat_FromDouble(__pyx_v_mult_sigma); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_17 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_17 = PyFloat_FromDouble(__pyx_v_J); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
-        __pyx_t_16 = PyFloat_FromDouble(__pyx_v_Jex); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_16 = PyFloat_FromDouble(__pyx_v_Jex); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
-        __pyx_t_15 = PyFloat_FromDouble((-__pyx_v_omega)); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_15 = PyFloat_FromDouble((-__pyx_v_omega)); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
-        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_q); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_q); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_22 = PyFloat_FromDouble(__pyx_v_Omega); if (unlikely(!__pyx_t_22)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_22 = PyFloat_FromDouble(__pyx_v_Omega); if (unlikely(!__pyx_t_22)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_22);
         __pyx_t_25 = NULL;
         __pyx_t_18 = 0;
@@ -3398,31 +3398,31 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_DECREF(__pyx_t_22); __pyx_t_22 = 0;
-          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 84, __pyx_L1_error)
+          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 67, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         }
-        __pyx_t_12 = PyNumber_Multiply(__pyx_t_1, __pyx_t_13); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_12 = PyNumber_Multiply(__pyx_t_1, __pyx_t_13); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_kdel(__pyx_v_Lambda, (-__pyx_v_q)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 84, __pyx_L1_error)
-        __pyx_t_13 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_3 = __pyx_f_10BaF_solver_11interaction_kdel(__pyx_v_Lambda, (-__pyx_v_q)); if (unlikely(__pyx_t_3 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L1_error)
+        __pyx_t_13 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_1 = PyNumber_Multiply(__pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_1 = PyNumber_Multiply(__pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __pyx_t_13 = PyNumber_InPlaceAdd(__pyx_t_11, __pyx_t_1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_13 = PyNumber_InPlaceAdd(__pyx_t_11, __pyx_t_1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_13); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 84, __pyx_L1_error)
+        __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_13); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_v_val = __pyx_t_3;
       }
 
-      /* "BaF_solver/interaction.pyx":77
+      /* "BaF_solver/interaction.pyx":60
  *                 )
  * 
  *         for sigma in [-1.0/2,1.0/2]:             # <<<<<<<<<<<<<<
@@ -3433,9 +3433,9 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   }
 
-  /* "BaF_solver/interaction.pyx":86
+  /* "BaF_solver/interaction.pyx":69
  *                 val += mult_sigma*wigner_3j(J,1,Jex,-omega,q,Omega)*kdel(Lambda,-q)
- *         #iter_idx += 2
+ * 
  *     return val*pre_factor             # <<<<<<<<<<<<<<
  * 
  * ####################################################################################################
@@ -3443,9 +3443,9 @@ static double __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(PyObject 
   __pyx_r = (__pyx_v_val * __pyx_v_pre_factor);
   goto __pyx_L0;
 
-  /* "BaF_solver/interaction.pyx":40
+  /* "BaF_solver/interaction.pyx":24
  * 
- * 
+ * #### Dipole matrix element between Sigma and Pi states #######################
  * cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, double pol=0.0):    #pol convention changed. pol defined from ground (state1) to excited (state2).             # <<<<<<<<<<<<<<
  *                                                                     # pol +1 -> mF_state2 - mF_state1 = +1
  *     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
@@ -3530,7 +3530,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -3538,21 +3538,21 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("H_int_omega_optimized", 0, 2, 3, 1); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("H_int_omega_optimized", 0, 2, 3, 1); __PYX_ERR(0, 24, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_pol);
           if (value) { values[2] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "H_int_omega_optimized") < 0)) __PYX_ERR(0, 40, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "H_int_omega_optimized") < 0)) __PYX_ERR(0, 24, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -3567,14 +3567,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     __pyx_v_state1 = values[0];
     __pyx_v_state2 = values[1];
     if (values[2]) {
-      __pyx_v_pol = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_pol == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+      __pyx_v_pol = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_pol == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
     } else {
       __pyx_v_pol = ((double)0.0);
     }
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("H_int_omega_optimized", 0, 2, 3, __pyx_nargs); __PYX_ERR(0, 40, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("H_int_omega_optimized", 0, 2, 3, __pyx_nargs); __PYX_ERR(0, 24, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -3614,8 +3614,8 @@ static PyObject *__pyx_pf_10BaF_solver_11interaction_H_int_omega_optimized(CYTHO
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.pol = __pyx_v_pol;
-  __pyx_t_1 = __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(__pyx_v_state1, __pyx_v_state2, 0, &__pyx_t_2); if (unlikely(__pyx_t_1 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_10BaF_solver_11interaction_H_int_omega_optimized(__pyx_v_state1, __pyx_v_state2, 0, &__pyx_t_2); if (unlikely(__pyx_t_1 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -3690,7 +3690,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 51, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3701,18 +3701,18 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "BaF_solver/interaction.pyx":40
+  /* "BaF_solver/interaction.pyx":24
  * 
- * 
+ * #### Dipole matrix element between Sigma and Pi states #######################
  * cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, double pol=0.0):    #pol convention changed. pol defined from ground (state1) to excited (state2).             # <<<<<<<<<<<<<<
  *                                                                     # pol +1 -> mF_state2 - mF_state1 = +1
  *     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
  */
-  __pyx_tuple__2 = PyTuple_Pack(3, __pyx_n_s_state1, __pyx_n_s_state2, __pyx_n_s_pol); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(3, __pyx_n_s_state1, __pyx_n_s_state2, __pyx_n_s_pol); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
-  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_BaF_solver_interaction_pyx, __pyx_n_s_H_int_omega_optimized, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 40, __pyx_L1_error)
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_float_0_0); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_BaF_solver_interaction_pyx, __pyx_n_s_H_int_omega_optimized, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 24, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_float_0_0); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
   __Pyx_RefNannyFinishContext();
@@ -4084,7 +4084,7 @@ if (!__Pyx_RefNanny) {
 
   /* "BaF_solver/interaction.pyx":1
  * from .states import SigmaLevel,PiLevelOmega             # <<<<<<<<<<<<<<
- * 
+ * from .fast_wigners import wigner_6j,wigner_3j,wigner_9j
  * 
  */
   __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -4108,63 +4108,62 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "BaF_solver/interaction.pyx":5
- * 
- * 
+  /* "BaF_solver/interaction.pyx":2
+ * from .states import SigmaLevel,PiLevelOmega
  * from .fast_wigners import wigner_6j,wigner_3j,wigner_9j             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_3 = PyList_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 5, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_n_s_wigner_6j);
   __Pyx_GIVEREF(__pyx_n_s_wigner_6j);
-  if (__Pyx_PyList_SET_ITEM(__pyx_t_3, 0, __pyx_n_s_wigner_6j)) __PYX_ERR(0, 5, __pyx_L1_error);
+  if (__Pyx_PyList_SET_ITEM(__pyx_t_3, 0, __pyx_n_s_wigner_6j)) __PYX_ERR(0, 2, __pyx_L1_error);
   __Pyx_INCREF(__pyx_n_s_wigner_3j);
   __Pyx_GIVEREF(__pyx_n_s_wigner_3j);
-  if (__Pyx_PyList_SET_ITEM(__pyx_t_3, 1, __pyx_n_s_wigner_3j)) __PYX_ERR(0, 5, __pyx_L1_error);
+  if (__Pyx_PyList_SET_ITEM(__pyx_t_3, 1, __pyx_n_s_wigner_3j)) __PYX_ERR(0, 2, __pyx_L1_error);
   __Pyx_INCREF(__pyx_n_s_wigner_9j);
   __Pyx_GIVEREF(__pyx_n_s_wigner_9j);
-  if (__Pyx_PyList_SET_ITEM(__pyx_t_3, 2, __pyx_n_s_wigner_9j)) __PYX_ERR(0, 5, __pyx_L1_error);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_fast_wigners, __pyx_t_3, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 5, __pyx_L1_error)
+  if (__Pyx_PyList_SET_ITEM(__pyx_t_3, 2, __pyx_n_s_wigner_9j)) __PYX_ERR(0, 2, __pyx_L1_error);
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_fast_wigners, __pyx_t_3, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 5, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_wigner_6j); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wigner_6j, __pyx_t_3) < 0) __PYX_ERR(0, 5, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wigner_6j, __pyx_t_3) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 5, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_wigner_3j); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wigner_3j, __pyx_t_3) < 0) __PYX_ERR(0, 5, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wigner_3j, __pyx_t_3) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_wigner_9j); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 5, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_wigner_9j); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wigner_9j, __pyx_t_3) < 0) __PYX_ERR(0, 5, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wigner_9j, __pyx_t_3) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "BaF_solver/interaction.pyx":40
+  /* "BaF_solver/interaction.pyx":24
  * 
- * 
+ * #### Dipole matrix element between Sigma and Pi states #######################
  * cpdef double H_int_omega_optimized(state1:SigmaLevel, state2:PiLevelOmega, double pol=0.0):    #pol convention changed. pol defined from ground (state1) to excited (state2).             # <<<<<<<<<<<<<<
  *                                                                     # pol +1 -> mF_state2 - mF_state1 = +1
  *     cdef double S_,I1_,I2_,G,N,F1,F,mF,Lambda,Sigma,Omega,Jex,F1p,Fp,mFp
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_state1, __pyx_n_s_SigmaLevel) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_state2, __pyx_n_s_PiLevelOmega) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_10BaF_solver_11interaction_1H_int_omega_optimized, 0, __pyx_n_s_H_int_omega_optimized, NULL, __pyx_n_s_BaF_solver_interaction, __pyx_d, ((PyObject *)__pyx_codeobj__3)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_state1, __pyx_n_s_SigmaLevel) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_state2, __pyx_n_s_PiLevelOmega) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_10BaF_solver_11interaction_1H_int_omega_optimized, 0, __pyx_n_s_H_int_omega_optimized, NULL, __pyx_n_s_BaF_solver_interaction, __pyx_d, ((PyObject *)__pyx_codeobj__3)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_3, __pyx_tuple__4);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_3, __pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_H_int_omega_optimized, __pyx_t_3) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_H_int_omega_optimized, __pyx_t_3) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
   /* "BaF_solver/interaction.pyx":1
  * from .states import SigmaLevel,PiLevelOmega             # <<<<<<<<<<<<<<
- * 
+ * from .fast_wigners import wigner_6j,wigner_3j,wigner_9j
  * 
  */
   __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1, __pyx_L1_error)
